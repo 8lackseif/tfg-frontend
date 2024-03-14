@@ -20,19 +20,19 @@
 </template>
 
 <script>
-
 export default {
   name: 'Login_page',
   data() {
     return {
       username: '',
       pwd: '',
-      logoPath: require('@/assets/logo.png')
+      logoPath: require('@/assets/logo.png'),
+      datos:''
     }
   },
   methods: {
     login: function () {
-      //todo
+      this.$data.datos = this.$store.dispatch("login",this.$data.username,this.$data.pwd)
     }
   }
 }

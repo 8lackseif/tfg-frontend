@@ -8,7 +8,7 @@ const apiServices = {
     },
 
     login(username,pwd){
-        axios.post(process.env.API_URL + 'login', username, pwd)
+        axios.post('/login', username, pwd)
         .then(result => {
             return result
         })
