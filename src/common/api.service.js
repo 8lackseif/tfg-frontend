@@ -1,6 +1,7 @@
 import Vue from "vue"
 import VueAxios from "vue-axios"
 import axios from "axios"
+const api_url = "http://localhost:8000"
 
 const apiServices = {
     init(){
@@ -8,7 +9,7 @@ const apiServices = {
     },
 
     login(username,pwd){
-        axios.post('/login', username, pwd)
+        return axios.post(api_url + '/login', username, pwd)
         .then(result => {
             return result
         })

@@ -20,19 +20,20 @@
 </template>
 
 <script>
+
 export default {
   name: 'Login_page',
   data() {
     return {
-      username: '',
+      username: 'asd',
       pwd: '',
       logoPath: require('@/assets/logo.png'),
       datos:''
     }
   },
   methods: {
-    login: function () {
-      this.$data.datos = this.$store.dispatch("login",this.$data.username,this.$data.pwd)
+    login: async function () {
+      await this.$store.dispatch("login",this.username,this.pwd);
     }
   }
 }
