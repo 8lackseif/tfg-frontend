@@ -1,15 +1,15 @@
-import Cookies from "js-cookie";
-
-
+import Vue from "vue"
+import VueCookie from "vue-cookie"
 const cookies = {
-    setUserLogged(userLogged) {
-        Cookies.set("userLogged", userLogged);
+      init(){
+      Vue.use(VueCookie)
+      },
+      setUserLogged(userLogged) {
+        VueCookie.set("userLogged", userLogged,{expires:"3h"});
       },
       getUserLogged() {
-        return Cookies.get("userLogged");
+        return VueCookie.get("userLogged");
       }
 }
 
-export default{
-    cookies
-}
+export default cookies;

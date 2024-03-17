@@ -1,31 +1,26 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import apiServices from "@/common/api.service";
+import cookies from "@/common/cookies";
 
 Vue.use(Vuex);
 
-const stable = {
-
-}
-
-const mutations = {
-
-}
-
-const getters = {
-
-}
-
-const actions = {
-    async login(username,pwd){
-        const data = await apiServices.login(username,pwd)
-        return data
+export default new Vuex.Store({
+    state : {
     },
-    
-}
-export default {
-    stable,
-    mutations,
-    getters,
-    actions,
-  };
+    mutations : {
+
+    },
+    getters : {
+
+    },
+    actions:{
+        async login(username,pwd){
+            const data = await apiServices.login(username,pwd);
+            cookies.setUserLogged(data);
+        },
+        async getLogged(){
+            return await cookies.getUserLogged();
+        }
+    }
+});

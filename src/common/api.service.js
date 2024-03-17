@@ -8,10 +8,10 @@ const apiServices = {
         Vue.use(VueAxios,axios)
     },
 
-    login(username,pwd){
+    async login(username,pwd){
         return axios.post(api_url + '/login', username, pwd)
         .then(result => {
-            return result
+            return result.data
         })
         .catch(error => {
             console.log(error)
