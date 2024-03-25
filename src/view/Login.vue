@@ -11,7 +11,9 @@
         <span class="item">Password: </span>
         <input v-model="pwd" type="password" class="item"/>
 
-        <button v-on:click="login" class="loginButton">Log in</button>
+        <button type="button" v-on:click="login" class="loginButton">Log in</button>
+        <router-link to="/register">Register</router-link>
+        <b-alert class="item" v-model="error" variant="danger">{{message}}</b-alert>
       </div>
       <div class="container"></div>
     </form>
@@ -20,21 +22,37 @@
 </template>
 
 <script>
+import { RouterLink } from 'vue-router';
+
 
 export default {
   name: 'Login_page',
   data() {
     return {
-      username: 'asd',
+      username: '',
       pwd: '',
       logoPath: require('@/assets/logo.png'),
-      datos:''
+      error: false,
+      message: ''
     }
   },
   methods: {
     login: async function () {
-      await this.$store.dispatch("login",this.username,this.pwd);
-    }
+      const response = await this.$store.dispatch("login",{
+        "username": this.username,
+        "pwd": this.pwd,
+      });
+      
+      if(response.status != 200){
+        this.message = response.data;
+      }
+      else{
+        this.$router.push('/home');
+      }
+    },
+  },
+  components: {
+    'router-link': RouterLink,
   }
 }
 </script>
@@ -43,12 +61,11 @@ export default {
 .loginPage {
   box-sizing: border-box;
   margin: auto;
-  margin-top: 15vh;
+  margin-top: 5vh;
   border: 3px solid #f1f1f1;
-  height: 60vh;
+  height: 80vh;
   width: 30vw;
   align-items: center;
-  
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -60,11 +77,19 @@ export default {
 }
 
 .item {
+  height: 3vh;
+  width: 80%;
   flex-basis: 100%;
   margin: 1vh 5vw;
   text-align: start;
   font-weight: bold;
   display: block;
+}
+
+.container a {
+  width: 100%;
+  margin: 5vh 5vw;
+  text-align: center;
 }
 
 .loginButton{
@@ -75,8 +100,15 @@ export default {
 }
 
 .logoContainer {
+  height: 30vh;
+  width: 40vh;
   margin: auto;
-  margin-top: 3vh;
+}
+
+.logoContainer img {
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 

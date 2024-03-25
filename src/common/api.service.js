@@ -8,15 +8,26 @@ const apiServices = {
         Vue.use(VueAxios,axios)
     },
 
-    async login(username,pwd){
-        return axios.post(api_url + '/login', username, pwd)
+    async login(userData){
+        return axios.post(api_url + '/login', userData)
         .then(result => {
-            return result.data
+            return result;
         })
         .catch(error => {
-            console.log(error)
+            return error.response;
         })
     },
+    async register(userData){
+        
+        return axios.post(api_url + '/register', userData)
+        .then(result => {
+            return result;
+        })
+        .catch(error => {
+            return error.response;
+        });
+
+    }
 }
 
 export default apiServices;

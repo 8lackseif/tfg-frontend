@@ -4,11 +4,11 @@ const cookies = {
       init(){
       Vue.use(VueCookie)
       },
-      setUserLogged(userLogged) {
-        VueCookie.set("userLogged", userLogged,{expires:"3h"});
+      setJWTToken(token) {
+        VueCookie.set("token", token,{expires:"8h"});
       },
-      getUserLogged() {
-        return VueCookie.get("userLogged");
+      getJWTToken() {
+        return VueCookie.get("token");
       }
 }
 

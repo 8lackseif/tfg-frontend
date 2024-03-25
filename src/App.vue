@@ -10,7 +10,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@import "~@/assets/scss/vendors/bootstrap-vue/index";
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -19,4 +20,5 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
 </style>

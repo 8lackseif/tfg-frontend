@@ -15,12 +15,19 @@ export default new Vuex.Store({
 
     },
     actions:{
-        async login(username,pwd){
-            const data = await apiServices.login(username,pwd);
-            cookies.setUserLogged(data);
+        async login(_,userData){
+            const response = await apiServices.login(userData);
+            if(response.status == 200){
+                console.log("token " + response.data);
+                cookies.setJWTToken(response.data);
+            }
+            return response;
         },
-        async getLogged(){
-            return await cookies.getUserLogged();
+        async register(_,userData){
+            await apiServices.register(userData);
+        },
+        async getToken(){
+            return await cookies.getJWTToken();
         }
     }
 });
