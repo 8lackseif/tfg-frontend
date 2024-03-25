@@ -11,7 +11,6 @@
   
           <button type="button" v-on:click="register" class="registerButton">Register</button>
         </div>
-        <div class="container"></div>
       </form>
     </div>
   </template>
@@ -56,19 +55,25 @@
   }
   
   .container{
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 2vh;
   }
-  
-  .item {
-    height: 3vh;
-    width: 80%;
-    flex-basis: 100%;
-    margin: 1vh 5vw;
-    text-align: start;
-    font-weight: bold;
-    display: block;
-  }
+
+.item {
+  width: 80%;
+  flex-basis: 100%;
+  margin: 1vh 5vw;
+  font-weight: bold;
+}
+
+.container a {
+  width: 100%;
+  margin: 3vh 5vw;
+  font-weight: bold;
+  text-align: center;
+}
+
   
   .registerButton{
     width: 5vw;

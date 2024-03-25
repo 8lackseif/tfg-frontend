@@ -18,7 +18,6 @@ export default new Vuex.Store({
         async login(_,userData){
             const response = await apiServices.login(userData);
             if(response.status == 200){
-                console.log("token " + response.data);
                 cookies.setJWTToken(response.data);
             }
             return response;

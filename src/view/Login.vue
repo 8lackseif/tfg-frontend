@@ -13,7 +13,7 @@
 
         <button type="button" v-on:click="login" class="loginButton">Log in</button>
         <router-link to="/register">Register</router-link>
-        <b-alert class="item" v-model="error" variant="danger">{{message}}</b-alert>
+        <b-alert class="item text-center" v-model="error" variant="danger">{{message}}</b-alert>
       </div>
       <div class="container"></div>
     </form>
@@ -44,6 +44,7 @@ export default {
       });
       
       if(response.status != 200){
+        this.error = true;
         this.message = response.data;
       }
       else{
@@ -74,21 +75,20 @@ export default {
 .container{
   display: flex;
   flex-wrap: wrap;
+  font-size: 2vh;
 }
 
 .item {
-  height: 3vh;
   width: 80%;
   flex-basis: 100%;
   margin: 1vh 5vw;
-  text-align: start;
   font-weight: bold;
-  display: block;
 }
 
 .container a {
   width: 100%;
-  margin: 5vh 5vw;
+  margin: 3vh 5vw;
+  font-weight: bold;
   text-align: center;
 }
 
