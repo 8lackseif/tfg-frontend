@@ -1,5 +1,4 @@
 <template>
-
   <div>
     <form class="loginPage">
       <div class="logoContainer">
@@ -60,7 +59,6 @@ export default {
 
 <style>
 .loginPage {
-  box-sizing: border-box;
   margin: auto;
   margin-top: 5vh;
   border: 3px solid #f1f1f1;

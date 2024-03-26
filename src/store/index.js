@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import apiServices from "@/common/api.service";
 import cookies from "@/common/cookies";
+import JWTDecoder from "vue-jwt-decode";
 
 Vue.use(Vuex);
 
@@ -27,6 +28,11 @@ export default new Vuex.Store({
         },
         async getToken(){
             return await cookies.getJWTToken();
+        },
+        async getClaims(){
+            const token = await cookies.getJWTToken();
+            const payload = JWTDecoder.decode(token);
+            return payload;
         }
     }
 });

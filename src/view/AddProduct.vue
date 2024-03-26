@@ -1,7 +1,7 @@
 <template>
     <div>
         <TheHeader/>
-        <div class="HomePage">
+        <div>
             <h1>TO DO</h1>
         </div>
     </div>
@@ -12,13 +12,12 @@
 import TheHeader from '@/components/TheHeader.vue';
 
 export default {
-    name: 'Home_page',
+    name: 'AddProduct',
     data() {
       return {
       }
     },
     created(){
-      this.$store.dispatch("getClaims");
     },
     methods: {
     },
@@ -28,10 +27,3 @@ export default {
   }
 
 </script>
-
-
-
-
-<style>
-
-</style>
