@@ -3,7 +3,9 @@
     <div class="header-left">
         <img :src="logoPath" @click="goHome">
     </div>
+    <TheNavigator/>
     <div class="header-right">
+      <span @click="logout"><a><strong>LOGOUT</strong></a></span>
       <span><strong>User : </strong> {{ username }}</span>
     </div>
   </header>
@@ -11,6 +13,7 @@
 
 
 <script>
+import TheNavigator from '@/components/TheNavigator';
 
 export default {
     name: 'TheHeader',
@@ -25,16 +28,24 @@ export default {
         this.init();
     },
     methods: {
-        async init() {
+        init: async function() {
             const payload = await this.$store.dispatch("getClaims");
-            this.username = payload.username;
+            if(payload !== null){
+              this.username = payload.username;
+            }    
         },
-        async goHome(){
+        goHome: function(){
             if(this.$route.path !== '/home'){
                 this.$router.push("/home");
             }
-            
+        },
+        logout: async function(){
+          await this.$store.dispatch('logout');
+          this.$router.push('/');
         }
+    },
+    components: {
+      TheNavigator,
     }
   }
 </script>
@@ -65,6 +76,11 @@ header {
 .header-right {
   flex: 1;
   text-align: end;
+}
+
+.header-right span {
+  margin-right: 1vw;
+  cursor: pointer;
 }
 
 </style>

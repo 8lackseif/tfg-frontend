@@ -2,14 +2,17 @@
     <div>
         <TheHeader/>
         <div class="HomePage">
-            <h1>TO DO</h1>
+          <ProductsTable></ProductsTable>
         </div>
+        <TheFooter/>
     </div>
 </template>
 
 
 <script>
-import TheHeader from '@/components/TheHeader.vue';
+import TheHeader from '@/components/TheHeader';
+import TheFooter from '@/components/TheFooter';
+import ProductsTable from '@/components/ProductsTable';
 
 export default {
     name: 'Home_page',
@@ -18,12 +21,27 @@ export default {
       }
     },
     created(){
-      this.$store.dispatch("getClaims");
+      this.init();
     },
     methods: {
+      init: async function(){
+        const token = await this.$store.dispatch('getToken');
+        if( token === null){
+        this.$router.push('/');
+        }
+        else{
+          const payload = await this.$store.dispatch("getClaims");
+          if("administrator".localeCompare(payload.role) == 0){
+            this.isAdmin = true;
+          }
+        }
+      }
+
     },
     components:{
-      TheHeader
+      TheHeader,
+      TheFooter,
+      ProductsTable,
     }
   }
 

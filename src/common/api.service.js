@@ -27,6 +27,15 @@ const apiServices = {
             return error.response;
         });
 
+    },
+    async getProducts(){
+        return axios.get(api_url + '/get_products')
+        .then(result => {
+            return result;
+        })
+        .catch(error => {
+            return error.response;
+        });
     }
 }
 

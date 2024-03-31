@@ -26,7 +26,16 @@
         pwd2:'',
       }
     },
+    created(){
+      this.init();
+    },
     methods: {
+      init: async function(){
+        const payload = await this.$store.dispatch('getClaims');
+        if('administrator'.localeCompare(payload.role) != 0){
+          this.$router.push("/home");
+        }
+      },
       register: async function () {
         await this.$store.dispatch("register", {
           "username" : this.username,

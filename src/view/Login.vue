@@ -11,7 +11,6 @@
         <input v-model="pwd" type="password" class="item"/>
 
         <button type="button" v-on:click="login" class="loginButton">Log in</button>
-        <router-link to="/register">Register</router-link>
         <b-alert class="item text-center" v-model="error" variant="danger">{{message}}</b-alert>
       </div>
       <div class="container"></div>
@@ -21,9 +20,6 @@
 </template>
 
 <script>
-import { RouterLink } from 'vue-router';
-
-
 export default {
   name: 'Login_page',
   data() {
@@ -35,7 +31,16 @@ export default {
       message: ''
     }
   },
+  created(){
+    this.init();
+  },
   methods: {
+    init:async function(){
+      const token = await this.$store.dispatch('getToken');
+      if( token !== null){
+        this.$router.push('/home');
+      }
+    },
     login: async function () {
       const response = await this.$store.dispatch("login",{
         "username": this.username,
@@ -50,10 +55,8 @@ export default {
         this.$router.push('/home');
       }
     },
+    
   },
-  components: {
-    'router-link': RouterLink,
-  }
 }
 </script>
 

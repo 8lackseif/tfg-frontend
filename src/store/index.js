@@ -8,6 +8,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state : {
+        
     },
     mutations : {
 
@@ -23,6 +24,9 @@ export default new Vuex.Store({
             }
             return response;
         },
+        async logout(){
+            await cookies.logOut();
+        },
         async register(_,userData){
             await apiServices.register(userData);
         },
@@ -31,8 +35,17 @@ export default new Vuex.Store({
         },
         async getClaims(){
             const token = await cookies.getJWTToken();
-            const payload = JWTDecoder.decode(token);
-            return payload;
+            if(token !== null){
+                const payload = JWTDecoder.decode(token);
+                return payload;
+            }
+            return null;
+        },
+        async getProducts(){
+            const response = await apiServices.getProducts();
+            if(response.status === 200){
+                return response.data.products;
+            }
         }
     }
 });
