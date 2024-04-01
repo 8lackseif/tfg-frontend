@@ -11,7 +11,7 @@
                 <th>stock</th>
             </tr>
 
-            <tr v-for="p in products" :key="p.code">
+            <tr v-for="p in searchProducts" :key="p.code">
                 <td>{{p.code}}</td>
                 <td>{{p.name}}</td>
                 <td>{{p.description}}</td>
@@ -33,15 +33,27 @@ export default {
     data (){
         return {
             products: [
-             ]
+             ],
+            searchInput: "",
         }
     },
     created(){
         this.getProducts();
     },
+    computed: {
+        searchProducts(){
+            const filteredProducts = []
+            this.products.forEach(p => {
+                if(p.code.includes(this.searchInput) || p.name.includes(this.searchInput) || p.description.includes(this.searchInput)){
+                    filteredProducts.push(p);
+                }
+            });
+            return filteredProducts;
+        }
+    },
     methods: {
         search: async function(searchInput){
-            console.log(searchInput);
+            this.searchInput = searchInput;
         },
         getProducts: async function(){
             this.products = await this.$store.dispatch('getProducts');
