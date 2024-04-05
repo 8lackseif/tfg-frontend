@@ -2,18 +2,18 @@
   <div>
     <form class="loginPage">
       <div class="logoContainer">
-        <img :src="logoPath"/>
+        <img :src="logoPath" />
       </div>
       <div class="container">
-        <span class="item">Username: </span>
-        <input v-model="username" type="text" class="item"/>
-        <span class="item">Password: </span>
-        <input v-model="pwd" type="password" class="item"/>
-
-        <button type="button" v-on:click="login" class="loginButton">Log in</button>
-        <b-alert class="item text-center" v-model="error" variant="danger">{{message}}</b-alert>
+        <b-form-group class="flex-item " id="fieldset-1" label="Username:" label-for="input-1">
+          <b-form-input id="input-1" v-model="username" trim />
+        </b-form-group>
+        <b-form-group class="flex-item" id="fieldset-1" label="Password:" label-for="input-1">
+          <b-form-input id="input-1" v-model="pwd" type="password" trim />
+        </b-form-group>
+        <b-button pill variant="outline-primary" class="flex-item" @click="login">Log in</b-button>
+        <b-alert class="flex-item text-center" v-model="error" variant="danger">{{ message }}</b-alert>
       </div>
-      <div class="container"></div>
     </form>
   </div>
 
@@ -31,31 +31,31 @@ export default {
       message: ''
     }
   },
-  created(){
+  created() {
     this.init();
   },
   methods: {
-    init:async function(){
+    init: async function () {
       const token = await this.$store.dispatch('getToken');
-      if( token !== null){
+      if (token !== null) {
         this.$router.push('/home');
       }
     },
     login: async function () {
-      const response = await this.$store.dispatch("login",{
+      const response = await this.$store.dispatch("login", {
         "username": this.username,
         "pwd": this.pwd,
       });
-      
-      if(response.status != 200){
+
+      if (response.status != 200) {
         this.error = true;
         this.message = response.data;
       }
-      else{
+      else {
         this.$router.push('/home');
       }
     },
-    
+
   },
 }
 </script>
@@ -63,7 +63,7 @@ export default {
 <style>
 .loginPage {
   margin: auto;
-  margin-top: 5vh;
+  margin-top: 10vh;
   border: 3px solid #f1f1f1;
   height: 80vh;
   width: 30vw;
@@ -73,31 +73,19 @@ export default {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.container{
+.container {
   display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   font-size: 2vh;
 }
 
-.item {
-  width: 80%;
-  flex-basis: 100%;
-  margin: 1vh 5vw;
-  font-weight: bold;
-}
-
-.container a {
-  width: 100%;
-  margin: 3vh 5vw;
-  font-weight: bold;
-  text-align: center;
-}
-
-.loginButton{
-  width: 5vw;
-  height: 4vh;
+.flex-item {
   margin: auto;
   margin-top: 3vh;
+  width: 80%;
+  font-weight: bold;
+  text-align: start;
 }
 
 .logoContainer {
@@ -111,6 +99,4 @@ export default {
   height: auto;
   display: block;
 }
-
-
 </style>

@@ -1,94 +1,68 @@
 <template>
-    <div>
-      <form class="registerPage">
-        <div class="container">
-          <span class="item">Username: </span>
-          <input v-model="username" type="text" class="item"/>
-          <span class="item">Password: </span>
-          <input v-model="pwd" type="password" class="item"/>
-          <span class="item">Repeat password: </span>
-          <input v-model="pwd2" type="password" class="item"/>
-  
-          <button type="button" v-on:click="register" class="registerButton">Register</button>
-        </div>
-      </form>
-    </div>
-  </template>
-  
-  <script>
-  
-  export default {
-    name: 'Register_page',
-    data() {
-      return {
-        username: '',
-        pwd: '',
-        pwd2:'',
+  <div>
+    <form class="registerPage">
+      <div class="logoContainer">
+        <img :src="logoPath" />
+      </div>
+      <div class="container">
+        <b-form-group class="flex-item " id="fieldset-1" label="Username:" label-for="input-1">
+          <b-form-input id="input-1" v-model="username" trim />
+        </b-form-group>
+        <b-form-group class="flex-item" id="fieldset-1" label="Password:" label-for="input-1">
+          <b-form-input id="input-1" v-model="pwd" type="password" trim />
+        </b-form-group>
+        <b-form-group class="flex-item" id="fieldset-1" label="Repeat Password:" label-for="input-1">
+          <b-form-input id="input-1" v-model="pwd2" type="password" trim />
+        </b-form-group>
+        <b-button pill variant="outline-primary" class="flex-item" @click="register">Register</b-button>
+      </div>
+    </form>
+  </div>
+</template>
+
+<script>
+
+export default {
+  name: 'Register_page',
+  data() {
+    return {
+      username: '',
+      pwd: '',
+      pwd2: '',
+      logoPath: require('@/assets/logo.png'),
+    }
+  },
+  created() {
+    this.init();
+  },
+  methods: {
+    init: async function () {
+      const payload = await this.$store.dispatch('getClaims');
+      if ('administrator'.localeCompare(payload.role) != 0) {
+        this.$router.push("/home");
       }
     },
-    created(){
-      this.init();
-    },
-    methods: {
-      init: async function(){
-        const payload = await this.$store.dispatch('getClaims');
-        if('administrator'.localeCompare(payload.role) != 0){
-          this.$router.push("/home");
-        }
-      },
-      register: async function () {
-        await this.$store.dispatch("register", {
-          "username" : this.username,
-          "pwd": this.pwd
-        });
-        this.$router.push('/');
-      }
+    register: async function () {
+      await this.$store.dispatch("register", {
+        "username": this.username,
+        "pwd": this.pwd
+      });
+      this.$router.push('/');
     }
   }
-  </script>
-  
-  <style>
-  .registerPage {
-    box-sizing: border-box;
-    margin: auto;
-    margin-top: 5vh;
-    border: 3px solid #f1f1f1;
-    height: 80vh;
-    width: 30vw;
-    align-items: center;
-    padding: 5vh 5vw;
-    display: flex;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .container{
-  display: flex;
-  flex-wrap: wrap;
-  font-size: 2vh;
-  }
-
-.item {
-  width: 80%;
-  flex-basis: 100%;
-  margin: 1vh 5vw;
-  font-weight: bold;
 }
+</script>
 
-.container a {
-  width: 100%;
-  margin: 3vh 5vw;
-  font-weight: bold;
-  text-align: center;
+<style>
+.registerPage {
+  margin: auto;
+  margin-top: 10vh;
+  border: 3px solid #f1f1f1;
+  height: 80vh;
+  width: 30vw;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
-  
-  .registerButton{
-    width: 5vw;
-    height: 4vh;
-    margin: auto;
-    margin-top: 3vh;
-  }
-  
-  </style>
+</style>

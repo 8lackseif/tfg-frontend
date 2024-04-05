@@ -41,7 +41,7 @@ nav{
     height: 10vh;
     
 }
-ul {
+nav ul {
     display: flex;
     list-style-type: none;
     margin: 0;
@@ -49,14 +49,14 @@ ul {
     overflow: hidden;
     height: 100%;
 }   
-li {
+nav li {
     display: flex;
     float: left;
     margin: 2vh 2vw;
     align-items: center;
 }
 
-li a {
+nav li a {
     font-weight: bold;
     display: block;
     text-decoration: none;

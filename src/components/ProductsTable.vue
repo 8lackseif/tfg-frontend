@@ -1,25 +1,13 @@
 <template>
     <div class="myTable">
-        <div class="options">
+        <div class="tableOptions">
             <MySearcher @searchInput="search" />
+            <div>
+                <b-form-select class="p-1" v-model="selected" :options="orderOptions"/>
+            </div>
         </div>
-        <table>
-            <tr>
-                <th>code</th>
-                <th>name</th>
-                <th>description</th>
-                <th>stock</th>
-            </tr>
 
-            <tr v-for="p in searchProducts" :key="p.code">
-                <td>{{p.code}}</td>
-                <td>{{p.name}}</td>
-                <td>{{p.description}}</td>
-                <td>{{p.stock}}</td>
-            </tr>
-
-
-        </table>
+        <b-table class="text-start" striped hover :items="searchProducts" :sort-by="selected" fixed="true"/>
     </div>
 </template>
 
@@ -27,79 +15,68 @@
 <script>
 import MySearcher from './MySearcher.vue';
 
-
 export default {
     name: 'ProductsTable',
-    data (){
+    data() {
         return {
             products: [
-             ],
+            ],
             searchInput: "",
+            orderOptions: [
+                { value: "id", text: "ordering by id"},
+                { value: "code", text: "ordering by code" },
+                { value: "name", text: "ordering by name" },
+                { value: "description", text: "ordering by description" },
+                { value: "stock", text: "ordering by stock" }
+            ],
+            selected: "id",
+
+
         }
     },
-    created(){
+    created() {
         this.getProducts();
     },
     computed: {
-        searchProducts(){
+        searchProducts() {
             const filteredProducts = []
             this.products.forEach(p => {
-                if(p.code.includes(this.searchInput) || p.name.includes(this.searchInput) || p.description.includes(this.searchInput)){
+                if (p.code.includes(this.searchInput) || p.name.includes(this.searchInput) || p.description.includes(this.searchInput)) {
                     filteredProducts.push(p);
                 }
             });
+
+
             return filteredProducts;
-        }
+        },
     },
     methods: {
-        search: async function(searchInput){
+        search: async function (searchInput) {
             this.searchInput = searchInput;
         },
-        getProducts: async function(){
+        getProducts: async function () {
             this.products = await this.$store.dispatch('getProducts');
         }
     },
     components: {
         MySearcher,
     }
-  }
+}
 </script>
 
 <style>
 .myTable {
+    display: block;
     margin: 5vh 4vw;
     padding: 2vh 2vw;
-    border: 1px solid  #ccc;
-    border-radius: 10px;
 }
 
-.options {
+.tableOptions {
+    height: 5vh;
     display: flex;
     flex-direction: row;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse; 
-  border: 1px solid #ccc; 
-}
-
-th {
-  background-color: #f2f2f2; 
-  padding: 1vh; 
-  border: 1px solid #ccc; 
-}
-
-td {
-  padding: 1vh; 
-  border: 1px solid #ccc; 
-}
-
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-tr:hover {
-  background-color: #e0e0e0;
+    flex-wrap: nowrap;
+    margin: 1vh;
+    justify-content: space-between;
 }
 </style>

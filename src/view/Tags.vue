@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <TheHeader/>
-        <TheFooter/>
-    </div>
+  <div>
+    <TheHeader />
+    <TheFooter />
+  </div>
 </template>
 
 
@@ -11,22 +11,21 @@ import TheHeader from '@/components/TheHeader.vue';
 import TheFooter from '@/components/TheFooter.vue';
 
 export default {
-    name: 'ProductTags',
-    data (){
-        return {
+  name: 'ProductTags',
+  data() {
+    return {
 
-        }
-    },
-    created(){
-    },
-    methods: {
-    },
-    components:{
-      TheHeader,
-      TheFooter
     }
+  },
+  created() {
+  },
+  methods: {
+  },
+  components: {
+    TheHeader,
+    TheFooter
   }
+}
 </script>
 
-<style>
-</style>
+<style></style>

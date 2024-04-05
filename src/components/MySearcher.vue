@@ -31,26 +31,24 @@ export default {
 <style>
 .searcher{
     display: flex;
-    gap: 0.5vw;
-    height: 5vh;
-    flex-direction: row;
-    width: 12vw;
-    padding-bottom: 1vh;
+    flex-wrap: nowrap;
+    width: 10vw;
+    padding: 1vh 1vw;
 }
 
 .searcher input{
-    width: 7vw;
+    width: 70%;
 }
 
 .searcher button {
     display: inline-block;
-    width: 3vh;
+    width: 30%;
     background-color: inherit;
     border: none;
 }
 
 .searcher button img {
-    width: 100%;
-    height: 3vh;
+    width: auto;
+    height: 100%;
 }
 </style>
