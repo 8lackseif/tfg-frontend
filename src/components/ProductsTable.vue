@@ -11,22 +11,44 @@
         <b-table class="text-start" striped hover responsive :items="searchProducts" :fields="tablefields"
             :sort-by="selected" fixed="true" />
 
-        <b-modal centered scrollable ref="my-modal" hide-footer hide-header>
+        <b-modal centered ref="my-modal" hide-footer hide-header>
             <b-tabs content-class="mt-3">
                 <b-tab title="Add product" active>
                     <p>add product</p>
+                    <div class="d-flex justify-content-around">
+                        <b-button class="mt-3" variant="outline-danger" block @click="hideModal">close</b-button>
+                        <b-button class="mt-3" variant="outline-success" block>add</b-button>
+                    </div>
                 </b-tab>
                 <b-tab title="Delete product">
-                    <p>delete product</p>
+                    <v-select :options="products" label="name" :value="selectedProduct" />
+                    <div class="d-flex justify-content-around">
+                        <b-button class="mt-3" variant="outline-danger" block @click="hideModal">close</b-button>
+                        <b-button class="mt-3" variant="outline-success" block>delete</b-button>
+                    </div>
                 </b-tab>
                 <b-tab title="Update product">
-                    <p>update product</p>
+                    <v-select :options="products" label="name" v-model="selectedProduct" />
+                    <div class="container m-1">
+                        <b-form-group class="flex-item" id="fieldset-1" label="code:" label-for="input-1">
+                            <b-form-input id="input-1" v-model="selectedProduct.code" trim />
+                        </b-form-group>
+                        <b-form-group class="flex-item " id="fieldset-1" label="name:" label-for="input-1">
+                            <b-form-input id="input-1" v-model="selectedProduct.name" trim />
+                        </b-form-group>
+                        <b-form-group class="flex-item" id="fieldset-1" label="description:" label-for="input-1">
+                            <b-form-input id="input-1" v-model="selectedProduct.description" trim />
+                        </b-form-group>
+                        <b-form-group class="flex-item" id="fieldset-1" label="stock:" label-for="input-1">
+                            <b-form-input id="input-1" v-model="selectedProduct.stock" trim />
+                        </b-form-group>
+                    </div>
+                    <div class="d-flex justify-content-around">
+                        <b-button class="mt-3" variant="outline-danger" block @click="hideModal">close</b-button>
+                        <b-button class="mt-3" variant="outline-success" block>update</b-button>
+                    </div>
                 </b-tab>
             </b-tabs>
-            <div class="d-flex justify-content-around">
-                <b-button class="mt-3" variant="outline-danger" block @click="hideModal">close</b-button>
-                <b-button class="mt-3" variant="outline-success" block>modify</b-button>
-            </div>
         </b-modal>
     </div>
 </template>
@@ -50,8 +72,13 @@ export default {
                 { value: "stock", text: "ordering by stock" }
             ],
             selected: "code",
-
-
+            selectedProduct: {
+                id: "",
+                name: "",
+                description: "",
+                stock: 0,
+                tags: ""
+            },
         }
     },
     created() {

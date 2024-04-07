@@ -14,6 +14,10 @@ import 'bootstrap-vue/dist/bootstrap-vue.css';
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 
+import "vue-select/dist/vue-select.css";
+import vSelect from "vue-select";
+Vue.component("v-select", vSelect);
+
 import { RouterLink } from 'vue-router';
 Vue.use(RouterLink);
 
