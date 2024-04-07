@@ -1,5 +1,6 @@
 <template>
   <div>
+    <TheHeader/>
     <form class="registerPage">
       <div class="logoContainer">
         <img :src="logoPath" />
@@ -17,10 +18,13 @@
         <b-button pill variant="outline-primary" class="flex-item" @click="register">Register</b-button>
       </div>
     </form>
+    <TheFooter/>
   </div>
 </template>
 
 <script>
+import TheHeader from '@/components/TheHeader';
+import TheFooter from '@/components/TheFooter';
 
 export default {
   name: 'Register_page',
@@ -48,15 +52,20 @@ export default {
         "pwd": this.pwd
       });
       this.$router.push('/');
+    },
+  },
+  components:{
+      TheFooter,
+      TheHeader
     }
-  }
 }
 </script>
 
 <style>
 .registerPage {
   margin: auto;
-  margin-top: 10vh;
+  margin-top: 5vh;
+  margin-bottom: 5vh;
   border: 3px solid #f1f1f1;
   height: 80vh;
   width: 30vw;
