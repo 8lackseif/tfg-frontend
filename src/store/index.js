@@ -8,11 +8,17 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state : {
+        products: [],
     },
     mutations : {
-
+        setProducts (state, products) {
+            Vue.set(state, 'products', products);
+        }
     },
     getters : {
+        getProducts (state){
+            return state.products;
+        }
     },
     actions:{
         async login(_,userData){
@@ -39,10 +45,10 @@ export default new Vuex.Store({
             }
             return null;
         },
-        async getProducts(){
+        async loadProducts(){
             const response = await apiServices.getProducts();
             if(response.status === 200){
-                return response.data.products;
+                return response.data;
             }
         }
     }

@@ -82,6 +82,7 @@ export default {
         }
     },
     created() {
+        this.loadProducts();
         this.getProducts();
     },
     computed: {
@@ -102,7 +103,11 @@ export default {
             this.searchInput = searchInput;
         },
         getProducts: async function () {
-            this.products = await this.$store.dispatch('getProducts');
+            this.products = this.$store.getters.getProducts;
+        },
+        loadProducts: async function (){
+            const products = await this.$store.dispatch("loadProducts");
+            this.$store.commit('setProducts', {products});
         },
         showModal: async function () {
             this.$refs['my-modal'].show()
