@@ -45,8 +45,8 @@ export default new Vuex.Store({
             }
             return null;
         },
-        async loadProducts(){
-            const response = await apiServices.getProducts();
+        async loadProducts(_,token){
+            const response = await apiServices.getProducts(token);
             if(response.status === 200){
                 return response.data;
             }

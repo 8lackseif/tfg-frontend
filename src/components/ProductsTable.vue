@@ -106,7 +106,8 @@ export default {
             this.products = this.$store.getters.getProducts;
         },
         loadProducts: async function (){
-            const products = await this.$store.dispatch("loadProducts");
+            const token = await this.$store.dispatch("getToken");
+            const products = await this.$store.dispatch("loadProducts", token);
             this.$store.commit('setProducts', {products});
         },
         showModal: async function () {

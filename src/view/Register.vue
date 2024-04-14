@@ -47,9 +47,11 @@ export default {
       }
     },
     register: async function () {
+      const token = await this.$store.dispatch("getToken");
       await this.$store.dispatch("register", {
         "username": this.username,
-        "pwd": this.pwd
+        "pwd": this.pwd,
+        "token": token
       });
       this.$router.push('/');
     },

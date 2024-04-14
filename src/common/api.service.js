@@ -28,8 +28,8 @@ const apiServices = {
         });
 
     },
-    async getProducts(){
-        return axios.get(api_url + '/get_products')
+    async getProducts(token){
+        return axios.post(api_url + '/get_products', token)
         .then(result => {
             return result;
         })
