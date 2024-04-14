@@ -14,20 +14,22 @@
             :sort-by="selected" fixed="true" ref="selectableTable" @row-clicked="showProductModal" />
 
         <b-modal centered ref="product-modal" hide-footer hide-header>
-            <div class="p-container m-1">
-                <b-form-group class="p-flex-item" id="fieldset-1" label="code:" label-for="input-1">
+            <h2 class="text-center">Product Details</h2>
+            <div class="container m-1">
+                <b-form-group class="flex-item" id="fieldset-1" label="code:" label-for="input-1">
                     <b-form-input id="input-1" v-model="selectedProduct.code" trim :disabled="editable" />
                 </b-form-group>
-                <b-form-group class="p-flex-item " id="fieldset-1" label="name:" label-for="input-1">
+                <b-form-group class="flex-item " id="fieldset-1" label="name:" label-for="input-1">
                     <b-form-input id="input-1" v-model="selectedProduct.name" trim :disabled="editable" />
                 </b-form-group>
-                <b-form-group class="p-flex-item" id="fieldset-1" label="description:" label-for="input-1">
+                <b-form-group class="flex-item" id="fieldset-1" label="description:" label-for="input-1">
                     <b-form-input id="input-1" v-model="selectedProduct.description" trim :disabled="editable" />
                 </b-form-group>
-                <b-form-group class="p-flex-item" id="fieldset-1" label="stock:" label-for="input-1">
+                <b-form-group class="flex-item" id="fieldset-1" label="stock:" label-for="input-1">
                     <b-form-input id="input-1" v-model="selectedProduct.stock" trim :disabled="editable" />
                 </b-form-group>
             </div>
+            <b-table class="text-start" striped hover responsive :items="selectedProperties" fixed="true" />
         </b-modal>
 
         <b-modal centered ref="my-modal" hide-footer hide-header>
@@ -80,7 +82,7 @@ export default {
                 tags: "",
                 properties: ""
             },
-            selectedProperties: {},
+            selectedProperties: [],
             editable: true,
             addIcon: require('@/assets/add.png')
         }
@@ -126,6 +128,18 @@ export default {
         },
         showProductModal: async function (item) {
             this.selectedProduct = item;
+            this.selectedProperties = [];
+            if (this.selectedProduct.propertyNames != null) {
+                const propertyNames = JSON.parse(this.selectedProduct.propertyNames);
+                const propertyValues = JSON.parse(this.selectedProduct.propertyValues);
+                for (var i = 0; i < propertyNames.length; i++) {
+                    var obj = {
+                        propertyName: propertyNames[i],
+                        propertyValue: propertyValues[i]
+                    }
+                    this.selectedProperties.push(obj);
+                }
+            }
             this.$refs['product-modal'].show();
         },
         hideProductModal: async function () {
@@ -161,16 +175,5 @@ export default {
 .tableOptions img {
     height: 3vh;
     padding: 0;
-}
-
-.p-container {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-
-}
-
-.p-flex-item {
-    flex: 50%;
 }
 </style>
