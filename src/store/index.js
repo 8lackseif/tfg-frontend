@@ -7,47 +7,47 @@ import JWTDecoder from "vue-jwt-decode";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-    state : {
+    state: {
         products: [],
     },
-    mutations : {
-        setProducts (state, products) {
+    mutations: {
+        setProducts(state, products) {
             Vue.set(state, 'products', products);
         }
     },
-    getters : {
-        getProducts (state){
+    getters: {
+        getProducts(state) {
             return state.products;
         }
     },
-    actions:{
-        async login(_,userData){
+    actions: {
+        async login(_, userData) {
             const response = await apiServices.login(userData);
-            if(response.status == 200){
+            if (response.status == 200) {
                 cookies.setJWTToken(response.data);
             }
             return response;
         },
-        async logout(){
+        async logout() {
             await cookies.logOut();
         },
-        async register(_,userData){
+        async register(_, userData) {
             await apiServices.register(userData);
         },
-        async getToken(){
+        async getToken() {
             return await cookies.getJWTToken();
         },
-        async getClaims(){
+        async getClaims() {
             const token = await cookies.getJWTToken();
-            if(token !== null){
+            if (token !== null) {
                 const payload = JWTDecoder.decode(token);
                 return payload;
             }
             return null;
         },
-        async loadProducts(_,token){
+        async loadProducts(_, token) {
             const response = await apiServices.getProducts(token);
-            if(response.status === 200){
+            if (response.status === 200) {
                 return response.data;
             }
         }
