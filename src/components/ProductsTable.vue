@@ -11,26 +11,12 @@
         </div>
 
         <b-table class="text-start" striped hover responsive :items="searchProducts" :fields="tablefields"
-            :sort-by="selected" fixed="true" ref="selectableTable" @row-clicked="showProductModal" />
+            :sort-by="selected" :fixed=true ref="selectableTable" @row-clicked="showProductModal" />
 
-        <b-modal centered ref="product-modal" hide-footer hide-header>
-            <h2 class="text-center">Product Details</h2>
-            <div class="container m-1">
-                <b-form-group class="flex-item" id="fieldset-1" label="code:" label-for="input-1">
-                    <b-form-input id="input-1" v-model="selectedProduct.code" trim :disabled="editable" />
-                </b-form-group>
-                <b-form-group class="flex-item " id="fieldset-1" label="name:" label-for="input-1">
-                    <b-form-input id="input-1" v-model="selectedProduct.name" trim :disabled="editable" />
-                </b-form-group>
-                <b-form-group class="flex-item" id="fieldset-1" label="description:" label-for="input-1">
-                    <b-form-input id="input-1" v-model="selectedProduct.description" trim :disabled="editable" />
-                </b-form-group>
-                <b-form-group class="flex-item" id="fieldset-1" label="stock:" label-for="input-1">
-                    <b-form-input id="input-1" v-model="selectedProduct.stock" trim :disabled="editable" />
-                </b-form-group>
-            </div>
-            <b-table class="text-start" striped hover responsive :items="selectedProperties" fixed="true" />
+        <b-modal ref="product-modal" centered hide-footer hide-header>
+            <ProductModal :selectedProduct="selectedProduct" :selectedProperties="selectedProperties"/>
         </b-modal>
+        
 
         <b-modal centered ref="my-modal" hide-footer hide-header>
             <h2 class="text-center">Add Product</h2>
@@ -59,6 +45,7 @@
 
 <script>
 import MySearcher from './MySearcher.vue';
+import ProductModal from './ProductModal.vue';
 
 export default {
     name: 'ProductsTable',
@@ -83,7 +70,6 @@ export default {
                 properties: ""
             },
             selectedProperties: [],
-            editable: true,
             addIcon: require('@/assets/add.png')
         }
     },
@@ -112,6 +98,14 @@ export default {
             this.products = this.$store.getters.getProducts.products;
         },
         showModifyModal: async function () {
+            this.selectedProduct = {
+                id: "",
+                name: "",
+                description: "",
+                stock: 0,
+                tags: "",
+                properties: ""
+            }
             this.$refs['my-modal'].show();
         },
         hideModifyModal: async function () {
@@ -145,13 +139,11 @@ export default {
         hideProductModal: async function () {
             this.$refs['product-modal'].hide();
             this.editable = false;
-        },
-        changeEditable: async function () {
-            this.editable = !this.editable;
         }
     },
     components: {
         MySearcher,
+        ProductModal
     }
 }
 </script>
