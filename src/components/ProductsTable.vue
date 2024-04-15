@@ -126,7 +126,8 @@ export default {
                 token: token
             }
             await this.$store.dispatch("addProduct", product);
-            location.reload();
+            await this.hideModifyModal();
+            await this.loadProducts();
         },
         showProductModal: async function (item) {
             this.selectedProduct = item;
