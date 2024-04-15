@@ -15,6 +15,9 @@
         <b-form-group class="flex-item" id="fieldset-1" label="Repeat Password:" label-for="input-1">
           <b-form-input id="input-1" v-model="pwd2" type="password" trim />
         </b-form-group>
+        <b-form-group class="flex-item" id="fieldset-1" label="Role" label-for="input-1">
+          <b-form-select class="w-100" v-model="selected" :options="options" trim />
+        </b-form-group>
         <b-button pill variant="outline-primary" class="flex-item" @click="register">Register</b-button>
       </div>
     </form>
@@ -34,6 +37,11 @@ export default {
       pwd: '',
       pwd2: '',
       logoPath: require('@/assets/logo.png'),
+      selected: null,
+      options: [
+        {value: "user", text:"user"},
+        {value: "guest", text: "guest"}
+      ]
     }
   },
   created() {
@@ -51,6 +59,7 @@ export default {
       await this.$store.dispatch("register", {
         "username": this.username,
         "pwd": this.pwd,
+        "rol": this.selected,
         "token": token
       });
       this.$router.push('/');
@@ -66,11 +75,11 @@ export default {
 <style>
 .registerPage {
   margin: auto;
-  margin-top: 5vh;
-  margin-bottom: 5vh;
+  margin-top: 3vh;
+  margin-bottom: 3vh;
   border: 3px solid #f1f1f1;
-  height: 80vh;
-  width: 30vw;
+  height: 85vh;
+  width: 35vw;
   align-items: center;
   background-color: #fff;
   border-radius: 8px;

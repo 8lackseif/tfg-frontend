@@ -50,6 +50,9 @@ export default new Vuex.Store({
             if (response.status === 200) {
                 return response.data;
             }
+        },
+        async addProduct(_,product) {
+            await apiServices.addProduct(product);
         }
     }
 });

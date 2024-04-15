@@ -3,7 +3,7 @@
         <div class="tableOptions">
             <MySearcher @searchInput="search" />
             <div>
-                <b-button @click="showModifyModal" class="m-2">
+                <b-button @click="showModifyModal" class="m-2" v-if="canModify">
                     <img :src="addIcon" class="">
                 </b-button>
                 <b-form-select class="p-1" v-model="selected" :options="orderOptions" />
@@ -14,9 +14,9 @@
             :sort-by="selected" :fixed=true ref="selectableTable" @row-clicked="showProductModal" />
 
         <b-modal ref="product-modal" centered hide-footer hide-header>
-            <ProductModal :selectedProduct="selectedProduct" :selectedProperties="selectedProperties"/>
+            <ProductModal :selectedProduct="selectedProduct" :selectedProperties="selectedProperties" />
         </b-modal>
-        
+
 
         <b-modal centered ref="my-modal" hide-footer hide-header>
             <h2 class="text-center">Add Product</h2>
@@ -36,7 +36,7 @@
             </div>
             <div class="d-flex justify-content-around">
                 <b-button class="mt-3" variant="outline-danger" block @click="hideModifyModal">close</b-button>
-                <b-button class="mt-3" variant="outline-success" block>add</b-button>
+                <b-button class="mt-3" variant="outline-success" block @click="addProduct">add</b-button>
             </div>
         </b-modal>
     </div>
@@ -70,11 +70,16 @@ export default {
                 properties: ""
             },
             selectedProperties: [],
+            canModify: true,
             addIcon: require('@/assets/add.png')
         }
     },
     async created() {
         await this.loadProducts();
+        const payload = await this.$store.dispatch('getClaims');
+        if ('guest'.localeCompare(payload.role) === 0) {
+            this.canModify = false;
+        }
     },
     computed: {
         searchProducts() {
@@ -112,13 +117,16 @@ export default {
             this.$refs['my-modal'].hide();
         },
         addProduct: async function () {
-
-        },
-        updateProduct: async function () {
-
-        },
-        deleteProduct: async function () {
-
+            const token = await this.$store.dispatch("getToken");
+            const product = {
+                code: this.selectedProduct.code,
+                name: this.selectedProduct.name,
+                description: this.selectedProduct.description,
+                stock: parseInt(this.selectedProduct.stock),
+                token: token
+            }
+            await this.$store.dispatch("addProduct", product);
+            location.reload();
         },
         showProductModal: async function (item) {
             this.selectedProduct = item;
