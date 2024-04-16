@@ -53,6 +53,9 @@ export default new Vuex.Store({
         },
         async addProduct(_,product) {
             await apiServices.addProduct(product);
+        },
+        async deleteProduct(_,product) {
+            await apiServices.deleteProduct(product);
         }
     }
 });

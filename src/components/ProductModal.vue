@@ -16,6 +16,7 @@
             </b-form-group>
         </div>
         <b-table class="text-start" striped hover responsive :items="selectedProperties" :fixed=true />
+        <b-button class="mt-3" variant="outline-danger" block @click="deleteProduct" v-if="canModify"> delete </b-button>
     </div>
 </template>
 
@@ -35,11 +36,26 @@ export default {
     data() {
         return {
             editable: true,
+            canModify: true,
+        }
+    },
+    async created(){
+        const payload = await this.$store.dispatch('getClaims');
+        if ('guest'.localeCompare(payload.role) === 0) {
+            this.canModify = false;
         }
     },
     methods: {
         changeEditable: async function () {
             this.editable = !this.editable;
+        },
+        deleteProduct: async function () {
+            const token = await this.$store.dispatch('getToken');
+            const obj = {
+                token: token,
+                id: this.selectedProduct.id
+            }
+            await this.$store.dispatch('deleteProduct',obj);
         }
     }
 

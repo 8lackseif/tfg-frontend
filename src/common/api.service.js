@@ -45,6 +45,15 @@ const apiServices = {
         .catch(error => {
             return error.response;
         });
+    },
+    async deleteProduct(product){
+        return axios.post(api_url + '/delete_product', product)
+        .then(result => {
+            return result;
+        })
+        .catch(error => {
+            return error.response;
+        });
     }
 }
 
