@@ -56,7 +56,9 @@ export default {
                 id: this.selectedProduct.id
             }
             await this.$store.dispatch('deleteProduct',obj);
-        }
+            this.$emit('reload');
+            this.$emit('back');
+            }
     }
 
 }

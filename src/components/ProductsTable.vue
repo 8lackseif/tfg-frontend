@@ -14,7 +14,7 @@
             :sort-by="selected" :fixed=true ref="selectableTable" @row-clicked="showProductModal" />
 
         <b-modal ref="product-modal" centered hide-footer hide-header>
-            <ProductModal :selectedProduct="selectedProduct" :selectedProperties="selectedProperties" />
+            <ProductModal @back="hideProductModal" @reload="loadProducts" :selectedProduct="selectedProduct" :selectedProperties="selectedProperties" />
         </b-modal>
 
 
