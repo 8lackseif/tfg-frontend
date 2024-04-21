@@ -55,6 +55,15 @@ const apiServices = {
             return error.response;
         });
     },
+    async modifyProduct(product){
+        return axios.post(api_url + '/modify_product', product)
+        .then(result => {
+            return result;
+        })
+        .catch(error => {
+            return error.response;
+        });
+    },
     async addProperty(property){
         return axios.post(api_url + '/add_property', property)
         .then(result => {

@@ -3,23 +3,24 @@
         <h2 class="text-center">Product Details</h2>
         <div class="container m-1">
             <b-form-group class="flex-item" id="fieldset-1" label="code:" label-for="input-1">
-                <b-form-input id="input-1" :value="selectedProduct.code" trim :disabled="editable" />
+                <b-form-input id="input-1" :value="copySelectedProduct.code" trim :disabled="editable" />
             </b-form-group>
             <b-form-group class="flex-item " id="fieldset-2" label="name:" label-for="input-1">
-                <b-form-input id="input-1" :value="selectedProduct.name" trim :disabled="editable" />
+                <b-form-input id="input-1" :value="copySelectedProduct.name" trim :disabled="editable" />
             </b-form-group>
             <b-form-group class="flex-item" id="fieldset-3" label="description:" label-for="input-1">
-                <b-form-input id="input-1" :value="selectedProduct.description" trim :disabled="editable" />
+                <b-form-input id="input-1" :value="copySelectedProduct.description" trim :disabled="editable" />
             </b-form-group>
             <b-form-group class="flex-item" id="fieldset-4" label="stock:" label-for="input-1">
-                <b-form-input id="input-1" :value="selectedProduct.stock" trim :disabled="editable" />
+                <b-form-input id="input-1" :value="copySelectedProduct.stock" trim :disabled="editable" />
             </b-form-group>
         </div>
-        <b-table class="text-start" striped hover responsive :items="selectedProperties" :fields="computedFields"
-            :fixed=true>
+        <b-table class="text-start" striped hover responsive :items="selectedProperties" :fields="computedFields">
+            <!--
             <template v-slot:cell(propertyValue)="{ item }" v-if="!editable">
                 <b-input v-model="item['propertyValue']" />
             </template>
+-->
             <template v-slot:cell(delete)="{ item }">
                 <span><b-btn @click="deleteProperty(item)">delete</b-btn></span>
             </template>
@@ -61,7 +62,8 @@ export default {
                 { key: 'propertyValue', label: 'Property Value' },
                 { key: 'delete', label: 'actions', requiresModifyMode: true },
             ],
-            newProperty: {}
+            newProperty: {},
+            copySelectedProduct: this.selectedProduct
         }
     },
     async created() {
@@ -95,9 +97,12 @@ export default {
             }
             else {
                 this.modifyText = "Modify";
+                if (JSON.stringify(this.copySelectedProduct) !== JSON.stringify(this.selectedProduct)) {
+                    await this.$store.dispatch("modifyProduct", this.copySelectedProduct);
+                }
             }
         },
-        deleteProperty: async function(item){
+        deleteProperty: async function (item) {
             const property = {
                 id: this.selectedProduct.id,
                 property_name: item.propertyName,
@@ -105,9 +110,9 @@ export default {
             }
             await this.$store.dispatch("deleteProperty", property);
             this.$emit('reload');
-            this.$emit('refresh',{id: this.selectedProduct.id});
+            this.$emit('refresh', { id: this.selectedProduct.id });
         },
-        addProperty: async function(){
+        addProperty: async function () {
             const property = {
                 id: this.selectedProduct.id,
                 property_name: this.newProperty.propertyName,
@@ -115,7 +120,7 @@ export default {
             }
             await this.$store.dispatch("addProperty", property);
             this.$emit('reload');
-            this.$emit('refresh',{id: this.selectedProduct.id});
+            this.$emit('refresh', { id: this.selectedProduct.id });
         }
     },
     computed: {
