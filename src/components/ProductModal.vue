@@ -3,19 +3,16 @@
         <h2 class="text-center">Product Details</h2>
         <div class="container m-1">
             <b-form-group class="flex-item" id="fieldset-1" label="code:" label-for="input-1">
-                <b-form-input id="input-1" :value="copySelectedProduct.code" trim :disabled="editable" />
+                <b-form-input id="input-1" v-model="copySelectedProduct.code" trim :disabled="editable" />
             </b-form-group>
             <b-form-group class="flex-item " id="fieldset-2" label="name:" label-for="input-1">
-                <b-form-input id="input-1" :value="copySelectedProduct.name" trim :disabled="editable" />
+                <b-form-input id="input-1" v-model="copySelectedProduct.name" trim :disabled="editable" />
             </b-form-group>
             <b-form-group class="flex-item" id="fieldset-3" label="description:" label-for="input-1">
-                <b-form-input id="input-1" :value="copySelectedProduct.description" trim :disabled="editable" />
-            </b-form-group>
-            <b-form-group class="flex-item" id="fieldset-4" label="stock:" label-for="input-1">
-                <b-form-input id="input-1" :value="copySelectedProduct.stock" trim :disabled="editable" />
+                <b-form-input id="input-1" v-model="copySelectedProduct.description" trim :disabled="editable" />
             </b-form-group>
         </div>
-        <b-table class="text-start" striped hover responsive :items="selectedProperties" :fields="computedFields">
+        <b-table class="text-start" striped hover responsive :items="copySelectedProperties" :fields="computedFields">
             <!--
             <template v-slot:cell(propertyValue)="{ item }" v-if="!editable">
                 <b-input v-model="item['propertyValue']" />
@@ -63,7 +60,8 @@ export default {
                 { key: 'delete', label: 'actions', requiresModifyMode: true },
             ],
             newProperty: {},
-            copySelectedProduct: this.selectedProduct
+            copySelectedProduct: { ...this.selectedProduct },
+            copySelectedProperties: [...this.selectedProperties],
         }
     },
     async created() {
@@ -83,8 +81,8 @@ export default {
                 id: this.selectedProduct.id
             }
             await this.$store.dispatch('deleteProduct', obj);
-            this.$emit('reload');
-            this.$emit('back');
+            await this.$emit('reload');
+            await this.$emit('back');
         },
         setModify: async function () {
             this.editable = !this.editable;
@@ -97,30 +95,45 @@ export default {
             }
             else {
                 this.modifyText = "Modify";
-                if (JSON.stringify(this.copySelectedProduct) !== JSON.stringify(this.selectedProduct)) {
-                    await this.$store.dispatch("modifyProduct", this.copySelectedProduct);
+                if (JSON.stringify(this.copySelectedProduct) != JSON.stringify(this.selectedProduct)) {
+                    const token = await this.$store.dispatch('getToken');
+                    const product = {
+                        id: this.copySelectedProduct.id,
+                        code: this.copySelectedProduct.code,
+                        name: this.copySelectedProduct.name,
+                        description: this.copySelectedProduct.description,
+                        token: token
+                    }
+                    await this.$store.dispatch("modifyProduct", product);
+                    await this.$emit('reload');
+                    await this.$emit('refresh', { id: this.selectedProduct.id });
                 }
             }
         },
         deleteProperty: async function (item) {
+            const token = await this.$store.dispatch('getToken');
             const property = {
                 id: this.selectedProduct.id,
                 property_name: item.propertyName,
-                property_value: item.propertyValue
+                token: token
             }
             await this.$store.dispatch("deleteProperty", property);
-            this.$emit('reload');
-            this.$emit('refresh', { id: this.selectedProduct.id });
+            await this.$emit('reload');
+            this.copySelectedProperties = this.selectedProperties.filter(property => property.propertyName = item.propertyName );
         },
         addProperty: async function () {
+            const token = await this.$store.dispatch('getToken');
             const property = {
                 id: this.selectedProduct.id,
                 property_name: this.newProperty.propertyName,
-                property_value: this.newProperty.propertyValue
+                property_value: this.newProperty.propertyValue,
+                token: token
             }
             await this.$store.dispatch("addProperty", property);
-            this.$emit('reload');
-            this.$emit('refresh', { id: this.selectedProduct.id });
+            await this.$emit('reload');
+            this.copySelectedProperties.push(this.newProperty);
+            this.newProperty = {
+            }
         }
     },
     computed: {
