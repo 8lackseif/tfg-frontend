@@ -7,7 +7,6 @@ const apiServices = {
     init(){
         Vue.use(VueAxios,axios)
     },
-
     async login(userData){
         return axios.post(api_url + '/login', userData)
         .then(result => {

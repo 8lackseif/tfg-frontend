@@ -105,6 +105,7 @@ export default {
         showModifyModal: async function () {
             this.selectedProduct = {
                 id: "",
+                code: "",
                 name: "",
                 description: "",
                 stock: 0,
@@ -130,7 +131,7 @@ export default {
             await this.loadProducts();
         },
         showProductModal: async function (item) {
-            this.selectedProduct = this.products.find(product => product.id = item.id);
+            this.selectedProduct = this.products.find(product => product.id == item.id);
             this.selectedProperties = [];
             if (this.selectedProduct.property_names != null) {
                 const propertyNames = JSON.parse(this.selectedProduct.property_names);
@@ -175,7 +176,7 @@ export default {
 }
 
 .tableOptions img {
-    height: 3vh;
+    height: 1.5vh;
     padding: 0;
 }
 </style>
