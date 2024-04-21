@@ -54,7 +54,26 @@ const apiServices = {
         .catch(error => {
             return error.response;
         });
+    },
+    async addProperty(property){
+        return axios.post(api_url + '/add_property', property)
+        .then(result => {
+            return result;
+        })
+        .catch(error => {
+            return error.response;
+        });
+    },
+    async deleteProperty(property){
+        return axios.post(api_url + '/delete_property', property)
+        .then(result => {
+            return result;
+        })
+        .catch(error => {
+            return error.response;
+        });
     }
+    
 }
 
 export default apiServices;

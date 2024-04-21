@@ -14,7 +14,7 @@
             :sort-by="selected" :fixed=true ref="selectableTable" @row-clicked="showProductModal" />
 
         <b-modal ref="product-modal" centered hide-footer hide-header>
-            <ProductModal @back="hideProductModal" @reload="loadProducts" :selectedProduct="selectedProduct" :selectedProperties="selectedProperties" />
+            <ProductModal @back="hideProductModal" @reload="loadProducts" @refresh="showProductModal" :selectedProduct="selectedProduct" :selectedProperties="selectedProperties" />
         </b-modal>
 
 
@@ -130,15 +130,16 @@ export default {
             await this.loadProducts();
         },
         showProductModal: async function (item) {
-            this.selectedProduct = item;
+            this.selectedProduct = this.products.find(product => product.id = item.id);
             this.selectedProperties = [];
-            if (this.selectedProduct.propertyNames != null) {
-                const propertyNames = JSON.parse(this.selectedProduct.propertyNames);
-                const propertyValues = JSON.parse(this.selectedProduct.propertyValues);
+            if (this.selectedProduct.property_names != null) {
+                const propertyNames = JSON.parse(this.selectedProduct.property_names);
+                const propertyValues = JSON.parse(this.selectedProduct.property_values);
                 for (var i = 0; i < propertyNames.length; i++) {
                     var obj = {
                         propertyName: propertyNames[i],
-                        propertyValue: propertyValues[i]
+                        propertyValue: propertyValues[i],
+                        delete: undefined,
                     }
                     this.selectedProperties.push(obj);
                 }
