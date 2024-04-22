@@ -1,13 +1,13 @@
 <template>
   <div>
-    <TheHeader/>
+    <TheHeader />
     <form class="registerPage">
       <div class="logoContainer">
         <img :src="logoPath" />
       </div>
       <div class="container">
         <b-form-group class="flex-item " id="fieldset-1" label="Username:" label-for="input-1">
-          <b-form-input id="input-1" v-model="username" trim />
+          <b-form-input maxlength="30" id="input-1" v-model="username" trim />
         </b-form-group>
         <b-form-group class="flex-item" id="fieldset-1" label="Password:" label-for="input-1">
           <b-form-input id="input-1" v-model="pwd" type="password" trim />
@@ -21,7 +21,7 @@
         <b-button pill variant="outline-primary" class="flex-item" @click="register">Register</b-button>
       </div>
     </form>
-    <TheFooter/>
+    <TheFooter />
   </div>
 </template>
 
@@ -39,8 +39,8 @@ export default {
       logoPath: require('@/assets/logo.png'),
       selected: null,
       options: [
-        {value: "user", text:"user"},
-        {value: "guest", text: "guest"}
+        { value: "user", text: "user" },
+        { value: "guest", text: "guest" }
       ]
     }
   },
@@ -55,20 +55,26 @@ export default {
       }
     },
     register: async function () {
-      const token = await this.$store.dispatch("getToken");
-      await this.$store.dispatch("register", {
-        "username": this.username,
-        "pwd": this.pwd,
-        "rol": this.selected,
-        "token": token
-      });
-      this.$router.push('/');
+      if (this.pwd2 == this.pwd) {
+        const token = await this.$store.dispatch("getToken");
+        await this.$store.dispatch("register", {
+          "username": this.username,
+          "pwd": this.pwd,
+          "rol": this.selected,
+          "token": token
+        });
+        this.$router.push('/');
+      }
+      else{
+        alert("not same password");
+      }
+
     },
   },
-  components:{
-      TheFooter,
-      TheHeader
-    }
+  components: {
+    TheFooter,
+    TheHeader
+  }
 }
 </script>
 

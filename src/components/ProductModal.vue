@@ -22,14 +22,14 @@
                 <span><b-btn @click="deleteProperty(item)">delete</b-btn></span>
             </template>
         </b-table>
-        <div class="d-flex" v-if="!editable">
-            <b-input class="flex-item mt-3" v-model="newProperty.propertyName" trim />
-            <b-input class="flex-item mt-3" v-model="newProperty.propertyValue" trim />
-            <b-btn class="flex-item mt-3" @click="addProperty">add</b-btn>
+        <div class="d-flex" style="gap: 1vw" v-if="!editable">
+            <b-input class="flex-item" v-model="newProperty.propertyName" trim />
+            <b-input class="flex-item" v-model="newProperty.propertyValue" trim />
+            <b-btn class="flex-item" @click="addProperty">add</b-btn>
         </div>
         <div class="d-flex" v-if="canModify">
-            <b-button class="flex-item mt-3" variant="outline-danger" block @click="deleteProduct"> delete </b-button>
-            <b-button class="flex-item mt-3" variant="outline-info" block @click="setModify"> {{ modifyText }}
+            <b-button class="flex-item" variant="outline-danger" block @click="deleteProduct"> delete </b-button>
+            <b-button class="flex-item" variant="outline-info" block @click="setModify"> {{ modifyText }}
             </b-button>
         </div>
 
