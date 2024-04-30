@@ -13,7 +13,7 @@
         <div class="d-flex">
             <div class="productContainer" v-bind:key="p.id" v-for="p in searchProducts" @click="showProductModal(p)">
                 <img class="flex-item" :src="p.image_url"/>
-                <p class="flex-item"> cosas </p>
+                <p class="flex-item"> producto: {{ p.name }} <br> stock: {{ p.stock }} <br> {{ p.description }}</p>
             </div>
         </div>
 
@@ -198,11 +198,16 @@ export default {
 }
 
 .productContainer {
-    height: 40vh;
+    height: 50vh;
     width: 15vw;
     margin: 2vh 1vw;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.productContainer img{
+    height: 20vh;
+    border: 1px black solid;
 }
 
 .productContainer:hover {
