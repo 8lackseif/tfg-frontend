@@ -10,11 +10,18 @@
             </div>
         </div>
 
-        <b-table class="text-start" striped hover responsive :items="searchProducts" :fields="tablefields"
-            :sort-by="selected" :fixed=true ref="selectableTable" @row-clicked="showProductModal" />
+        <div class="d-flex">
+            <div class="productContainer" v-bind:key="p.id" v-for="p in searchProducts" @click="showProductModal(p)">
+                <img class="flex-item" :src="p.image_url"/>
+                <p class="flex-item"> cosas </p>
+            </div>
+        </div>
+
+
 
         <b-modal ref="product-modal" centered hide-footer hide-header>
-            <ProductModal @back="hideProductModal" @reload="loadProducts" @refresh="showProductModal" :selectedProduct="selectedProduct" :selectedProperties="selectedProperties" />
+            <ProductModal @back="hideProductModal" @reload="loadProducts" @refresh="showProductModal"
+                :selectedProduct="selectedProduct" :selectedProperties="selectedProperties" />
         </b-modal>
 
 
@@ -32,6 +39,9 @@
                 </b-form-group>
                 <b-form-group class="flex-item" id="fieldset-1" label="stock:" label-for="input-1">
                     <b-form-input id="input-1" v-model="selectedProduct.stock" trim />
+                </b-form-group>
+                <b-form-group class="flex-item" id="fieldset-1" label="image_url:" label-for="input-1">
+                    <b-form-input id="input-1" v-model="selectedProduct.image_url" trim />
                 </b-form-group>
             </div>
             <div class="d-flex justify-content-around">
@@ -83,14 +93,19 @@ export default {
     },
     computed: {
         searchProducts() {
-            const filteredProducts = []
+            var filteredProducts = []
             this.products.forEach(p => {
-                if (p.code.includes(this.searchInput) || p.name.includes(this.searchInput) || p.description.includes(this.searchInput) || p.tags.includes(this.searchInput)) {
+                if (p.code.includes(this.searchInput) || p.name.includes(this.searchInput) ||
+                    p.description.includes(this.searchInput) || p.tags.includes(this.searchInput ||
+                        p.properties.includes(this.searchInput))) {
                     filteredProducts.push(p);
                 }
             });
+
+            filteredProducts.sort((a,b)=>{return (a[this.selected] > b[this.selected])? 1: (a[this.selected] < b[this.selected])? -1: 0;});
+
             return filteredProducts;
-        },
+        }
     },
     methods: {
         search: async function (searchInput) {
@@ -109,6 +124,7 @@ export default {
                 name: "",
                 description: "",
                 stock: 0,
+                image_url: "",
                 tags: "",
                 properties: ""
             }
@@ -124,6 +140,7 @@ export default {
                 name: this.selectedProduct.name,
                 description: this.selectedProduct.description,
                 stock: parseInt(this.selectedProduct.stock),
+                image_url: this.selectedProduct.image_url,
                 token: token
             }
             await this.$store.dispatch("addProduct", product);
@@ -178,5 +195,17 @@ export default {
 .tableOptions img {
     height: 1.5vh;
     padding: 0;
+}
+
+.productContainer {
+    height: 40vh;
+    width: 15vw;
+    margin: 2vh 1vw;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.productContainer:hover {
+    background-color: rgb(189, 192, 191);
 }
 </style>

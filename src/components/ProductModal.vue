@@ -11,6 +11,9 @@
             <b-form-group class="flex-item" id="fieldset-3" label="description:" label-for="input-1">
                 <b-form-input id="input-1" v-model="copySelectedProduct.description" trim :disabled="editable" />
             </b-form-group>
+            <b-form-group class="flex-item" id="fieldset-4" label="image_url:" label-for="input-1">
+                <b-form-input id="input-1" v-model="copySelectedProduct.image_url" trim :disabled="editable" />
+            </b-form-group>
         </div>
         <b-table class="text-start" striped hover responsive :items="copySelectedProperties" :fields="computedFields">
             <!--
@@ -102,6 +105,7 @@ export default {
                         code: this.copySelectedProduct.code,
                         name: this.copySelectedProduct.name,
                         description: this.copySelectedProduct.description,
+                        image_url: this.copySelectedProduct.image_url,
                         token: token
                     }
                     await this.$store.dispatch("modifyProduct", product);
