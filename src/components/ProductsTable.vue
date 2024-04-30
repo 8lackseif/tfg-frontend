@@ -12,7 +12,7 @@
 
         <div class="d-flex">
             <div class="productContainer" v-bind:key="p.id" v-for="p in searchProducts" @click="showProductModal(p)">
-                <img class="flex-item" :src="p.image_url"/>
+                <img class="flex-item" :src="p.image_url" />
                 <p class="flex-item"> producto: {{ p.name }} <br> stock: {{ p.stock }} <br> {{ p.description }}</p>
             </div>
         </div>
@@ -29,10 +29,10 @@
             <h2 class="text-center">Add Product</h2>
             <div class="container m-1">
                 <b-form-group class="flex-item" id="fieldset-1" label="code:" label-for="input-1">
-                    <b-form-input id="input-1" v-model="selectedProduct.code" trim />
+                    <b-form-input id="input-1" v-model="selectedProduct.code" :state="inputRequired('code')" trim />
                 </b-form-group>
                 <b-form-group class="flex-item " id="fieldset-1" label="name:" label-for="input-1">
-                    <b-form-input id="input-1" v-model="selectedProduct.name" trim />
+                    <b-form-input id="input-1" v-model="selectedProduct.name" :state="inputRequired('name')" trim />
                 </b-form-group>
                 <b-form-group class="flex-item" id="fieldset-1" label="description:" label-for="input-1">
                     <b-form-input id="input-1" v-model="selectedProduct.description" trim />
@@ -41,7 +41,8 @@
                     <b-form-input id="input-1" v-model="selectedProduct.stock" trim />
                 </b-form-group>
                 <b-form-group class="flex-item" id="fieldset-1" label="image_url:" label-for="input-1">
-                    <b-form-input id="input-1" v-model="selectedProduct.image_url" trim />
+                    <b-form-input id="input-1" v-model="selectedProduct.image_url" :state="inputRequired('image_url')"
+                        trim />
                 </b-form-group>
             </div>
             <div class="d-flex justify-content-around">
@@ -74,8 +75,10 @@ export default {
             selectedProduct: {
                 id: "",
                 name: "",
+                code: "",
                 description: "",
                 stock: 0,
+                image_url: "",
                 tags: "",
                 properties: ""
             },
@@ -102,7 +105,7 @@ export default {
                 }
             });
 
-            filteredProducts.sort((a,b)=>{return (a[this.selected] > b[this.selected])? 1: (a[this.selected] < b[this.selected])? -1: 0;});
+            filteredProducts.sort((a, b) => { return (a[this.selected] > b[this.selected]) ? 1 : (a[this.selected] < b[this.selected]) ? -1 : 0; });
 
             return filteredProducts;
         }
@@ -143,9 +146,13 @@ export default {
                 image_url: this.selectedProduct.image_url,
                 token: token
             }
-            await this.$store.dispatch("addProduct", product);
-            await this.hideModifyModal();
-            await this.loadProducts();
+            
+            if ( product.name != "" && product.code != "" && product.image_url != ""){
+                await this.$store.dispatch("addProduct", product);
+                await this.hideModifyModal();
+                await this.loadProducts();
+            }
+
         },
         showProductModal: async function (item) {
             this.selectedProduct = this.products.find(product => product.id == item.id);
@@ -167,6 +174,9 @@ export default {
         hideProductModal: async function () {
             this.$refs['product-modal'].hide();
             this.editable = false;
+        },
+        inputRequired: function (property) {
+            return this.selectedProduct[property].length > 0 ? true : false;
         }
     },
     components: {
@@ -205,7 +215,7 @@ export default {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.productContainer img{
+.productContainer img {
     height: 20vh;
     border: 1px black solid;
 }
