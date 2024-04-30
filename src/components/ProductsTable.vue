@@ -10,7 +10,7 @@
             </div>
         </div>
 
-        <div class="d-flex">
+        <div class="productsContainer">
             <div class="productContainer" v-bind:key="p.id" v-for="p in searchProducts" @click="showProductModal(p)">
                 <img class="flex-item" :src="p.image_url" />
                 <p class="flex-item"> producto: {{ p.name }} <br> stock: {{ p.stock }} <br> {{ p.description }}</p>
@@ -30,9 +30,15 @@
             <div class="container m-1">
                 <b-form-group class="flex-item" id="fieldset-1" label="code:" label-for="input-1">
                     <b-form-input id="input-1" v-model="selectedProduct.code" :state="inputRequired('code')" trim />
+                    <b-form-invalid-feedback id="input-live-feedback1">
+                        This field is obbligatory.
+                    </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group class="flex-item " id="fieldset-1" label="name:" label-for="input-1">
                     <b-form-input id="input-1" v-model="selectedProduct.name" :state="inputRequired('name')" trim />
+                    <b-form-invalid-feedback id="input-live-feedback2">
+                        This field is obbligatory.
+                    </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group class="flex-item" id="fieldset-1" label="description:" label-for="input-1">
                     <b-form-input id="input-1" v-model="selectedProduct.description" trim />
@@ -41,8 +47,7 @@
                     <b-form-input id="input-1" v-model="selectedProduct.stock" trim />
                 </b-form-group>
                 <b-form-group class="flex-item" id="fieldset-1" label="image_url:" label-for="input-1">
-                    <b-form-input id="input-1" v-model="selectedProduct.image_url" :state="inputRequired('image_url')"
-                        trim />
+                    <b-form-input id="input-1" v-model="selectedProduct.image_url" trim />
                 </b-form-group>
             </div>
             <div class="d-flex justify-content-around">
@@ -146,8 +151,8 @@ export default {
                 image_url: this.selectedProduct.image_url,
                 token: token
             }
-            
-            if ( product.name != "" && product.code != "" && product.image_url != ""){
+
+            if (product.name != "" && product.code != "") {
                 await this.$store.dispatch("addProduct", product);
                 await this.hideModifyModal();
                 await this.loadProducts();
@@ -210,14 +215,22 @@ export default {
 .productContainer {
     height: 50vh;
     width: 15vw;
-    margin: 2vh 1vw;
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 2vh;
+}
+
+.productsContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .productContainer img {
     height: 20vh;
     border: 1px black solid;
+    border-radius: 5px;
 }
 
 .productContainer:hover {

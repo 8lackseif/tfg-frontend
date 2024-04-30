@@ -46,12 +46,3 @@ export default {
   }
 
 </script>
-
-
-
-
-<style>
-.HomePage{
-  height: 78vh;
-}
-</style>

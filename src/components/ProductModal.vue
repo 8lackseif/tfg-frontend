@@ -3,10 +3,18 @@
         <h2 class="text-center">Product Details</h2>
         <div class="container m-1">
             <b-form-group class="flex-item" id="fieldset-1" label="code:" label-for="input-1">
-                <b-form-input id="input-1" v-model="copySelectedProduct.code" trim :disabled="editable" />
+                <b-form-input id="input-1" v-model="copySelectedProduct.code" trim :disabled="editable"
+                    :state="inputRequired('code')" />
+                <b-form-invalid-feedback id="input-live-feedback1">
+                    This field is obbligatory.
+                </b-form-invalid-feedback>
             </b-form-group>
             <b-form-group class="flex-item " id="fieldset-2" label="name:" label-for="input-1">
-                <b-form-input id="input-1" v-model="copySelectedProduct.name" trim :disabled="editable" />
+                <b-form-input id="input-1" v-model="copySelectedProduct.name" trim :disabled="editable"
+                    :state="inputRequired('name')" />
+                <b-form-invalid-feedback id="input-live-feedback2">
+                    This field is obbligatory.
+                </b-form-invalid-feedback>
             </b-form-group>
             <b-form-group class="flex-item" id="fieldset-3" label="description:" label-for="input-1">
                 <b-form-input id="input-1" v-model="copySelectedProduct.description" trim :disabled="editable" />
@@ -30,9 +38,9 @@
             <b-input class="flex-item" v-model="newProperty.propertyValue" trim />
             <b-btn class="flex-item" @click="addProperty">add</b-btn>
         </div>
-        <div class="d-flex" v-if="canModify">
-            <b-button class="flex-item" variant="outline-danger" block @click="deleteProduct"> delete </b-button>
-            <b-button class="flex-item" variant="outline-info" block @click="setModify"> {{ modifyText }}
+        <div class="d-flex justify-content-around" v-if="canModify">
+            <b-button class="flex-item w-25" variant="outline-danger" block @click="deleteProduct"> delete </b-button>
+            <b-button class="flex-item w-25" variant="outline-info" block @click="setModify"> {{ modifyText }}
             </b-button>
         </div>
 
@@ -123,7 +131,7 @@ export default {
             }
             await this.$store.dispatch("deleteProperty", property);
             await this.$emit('reload');
-            this.copySelectedProperties = this.selectedProperties.filter(property => property.propertyName = item.propertyName );
+            this.copySelectedProperties = this.selectedProperties.filter(property => property.propertyName = item.propertyName);
         },
         addProperty: async function () {
             const token = await this.$store.dispatch('getToken');
@@ -138,6 +146,9 @@ export default {
             this.copySelectedProperties.push(this.newProperty);
             this.newProperty = {
             }
+        },
+        inputRequired: function (property) {
+            return this.copySelectedProduct[property].length > 0 ? true : false;
         }
     },
     computed: {
