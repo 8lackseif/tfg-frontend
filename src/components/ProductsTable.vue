@@ -19,7 +19,7 @@
 
 
 
-        <b-modal ref="product-modal" centered hide-footer hide-header>
+        <b-modal ref="product-modal" size="xl" centered hide-footer hide-header>
             <ProductModal @back="hideProductModal" @reload="loadProducts" @refresh="showProductModal"
                 :selectedProduct="selectedProduct" :selectedProperties="selectedProperties" />
         </b-modal>
@@ -213,7 +213,7 @@ export default {
 }
 
 .productContainer {
-    height: 50vh;
+    height: 60vh;
     width: 15vw;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -221,19 +221,22 @@ export default {
 }
 
 .productsContainer{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-gap: 1vw;
 }
 
 .productContainer img {
-    height: 20vh;
+    height: 30vh;
     border: 1px black solid;
     border-radius: 5px;
 }
 
 .productContainer:hover {
     background-color: rgb(189, 192, 191);
+}
+
+b-modal {
+    width: auto;
 }
 </style>

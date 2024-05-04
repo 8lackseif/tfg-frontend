@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form class="loginPage">
+    <form id="loginPage">
       <div class="logoContainer">
         <img :src="logoPath" />
       </div>
@@ -61,7 +61,7 @@ export default {
 </script>
 
 <style>
-.loginPage {
+#loginPage {
   margin: auto;
   margin-top: 10vh;
   border: 3px solid #f1f1f1;

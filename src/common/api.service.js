@@ -80,7 +80,17 @@ const apiServices = {
         .catch(error => {
             return error.response;
         });
+    },
+    async unbindTag(query){
+        return axios.post(api_url + '/unbind_tag', query)
+        .then(result => {
+            return result;
+        })
+        .catch(error => {
+            return error.response;
+        });
     }
+
     
 }
 

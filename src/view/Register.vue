@@ -1,7 +1,7 @@
 <template>
   <div>
     <TheHeader />
-    <form class="registerPage">
+    <form id="registerPage">
       <div class="logoContainer">
         <img :src="logoPath" />
       </div>
@@ -79,7 +79,7 @@ export default {
 </script>
 
 <style>
-.registerPage {
+#registerPage {
   margin: auto;
   margin-top: 3vh;
   margin-bottom: 3vh;

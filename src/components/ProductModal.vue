@@ -1,43 +1,55 @@
 <template>
-    <div>
+    <div class="productDetailsContainer">
         <h2 class="text-center">Product Details</h2>
-        <div class="container m-1">
-            <b-form-group class="flex-item" id="fieldset-1" label="code:" label-for="input-1">
-                <b-form-input id="input-1" v-model="copySelectedProduct.code" trim :disabled="editable"
-                    :state="inputRequired('code')" />
-                <b-form-invalid-feedback id="input-live-feedback1">
-                    This field is obbligatory.
-                </b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group class="flex-item " id="fieldset-2" label="name:" label-for="input-1">
-                <b-form-input id="input-1" v-model="copySelectedProduct.name" trim :disabled="editable"
-                    :state="inputRequired('name')" />
-                <b-form-invalid-feedback id="input-live-feedback2">
-                    This field is obbligatory.
-                </b-form-invalid-feedback>
-            </b-form-group>
-            <b-form-group class="flex-item" id="fieldset-3" label="description:" label-for="input-1">
-                <b-form-input id="input-1" v-model="copySelectedProduct.description" trim :disabled="editable" />
-            </b-form-group>
-            <b-form-group class="flex-item" id="fieldset-4" label="image_url:" label-for="input-1">
-                <b-form-input id="input-1" v-model="copySelectedProduct.image_url" trim :disabled="editable" />
-            </b-form-group>
+
+        <div class="productInfoContainer">
+            <div class="container flex-item m-1">
+                <b-form-group class="flex-item" id="fieldset-1" label="code:" label-for="input-1">
+                    <b-form-input id="input-1" v-model="copySelectedProduct.code" trim :disabled="editable"
+                        :state="inputRequired('code')" />
+                    <b-form-invalid-feedback id="input-live-feedback1">
+                        This field is obbligatory.
+                    </b-form-invalid-feedback>
+                </b-form-group>
+                <b-form-group class="flex-item " id="fieldset-2" label="name:" label-for="input-1">
+                    <b-form-input id="input-1" v-model="copySelectedProduct.name" trim :disabled="editable"
+                        :state="inputRequired('name')" />
+                    <b-form-invalid-feedback id="input-live-feedback2">
+                        This field is obbligatory.
+                    </b-form-invalid-feedback>
+                </b-form-group>
+                <b-form-group class="flex-item" id="fieldset-3" label="description:" label-for="input-1">
+                    <b-form-input id="input-1" v-model="copySelectedProduct.description" trim :disabled="editable" />
+                </b-form-group>
+                <b-form-group class="flex-item" id="fieldset-4" label="image_url:" label-for="input-1">
+                    <b-form-input id="input-1" v-model="copySelectedProduct.image_url" trim :disabled="editable" />
+                </b-form-group>
+            </div>
+            <div class="flex-item">
+                <h3 class="text-center">Tags</h3>
+                <div class="tagsContainer">
+                    <div class="tag" v-bind:key="t"  v-for="(t, index) in tags" >
+                        <p>{{ t }}</p>
+                        <div class="cross" v-if="!editable" @click="unbindTag(index)">&#x2715;</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-item properties">
+                <h3 class="text-center">Properties</h3>
+                <b-table class="text-start flex-item" sticky-header striped hover responsive :items="copySelectedProperties"
+                    :fields="computedFields">
+                    <template v-slot:cell(delete)="{ item }">
+                        <span><b-btn @click="deleteProperty(item)">delete</b-btn></span>
+                    </template>
+                </b-table>
+                <div class="addProperty" v-if="!editable">
+                    <b-input class="flex-item" v-model="newProperty.propertyName" trim />
+                    <b-input class="flex-item" v-model="newProperty.propertyValue" trim />
+                    <b-btn class="flex-item" @click="addProperty">add</b-btn>
+                </div>
+            </div>
         </div>
-        <b-table class="text-start" striped hover responsive :items="copySelectedProperties" :fields="computedFields">
-            <!--
-            <template v-slot:cell(propertyValue)="{ item }" v-if="!editable">
-                <b-input v-model="item['propertyValue']" />
-            </template>
--->
-            <template v-slot:cell(delete)="{ item }">
-                <span><b-btn @click="deleteProperty(item)">delete</b-btn></span>
-            </template>
-        </b-table>
-        <div class="d-flex" style="gap: 1vw" v-if="!editable">
-            <b-input class="flex-item" v-model="newProperty.propertyName" trim />
-            <b-input class="flex-item" v-model="newProperty.propertyValue" trim />
-            <b-btn class="flex-item" @click="addProperty">add</b-btn>
-        </div>
+
         <div class="d-flex justify-content-around" v-if="canModify">
             <b-button class="flex-item w-25" variant="outline-danger" block @click="deleteProduct"> delete </b-button>
             <b-button class="flex-item w-25" variant="outline-info" block @click="setModify"> {{ modifyText }}
@@ -73,6 +85,7 @@ export default {
             newProperty: {},
             copySelectedProduct: { ...this.selectedProduct },
             copySelectedProperties: [...this.selectedProperties],
+            tags: []
         }
     },
     async created() {
@@ -80,6 +93,8 @@ export default {
         if ('guest'.localeCompare(payload.role) === 0) {
             this.canModify = false;
         }
+
+        this.tags = JSON.parse(this.copySelectedProduct.tags);
     },
     methods: {
         changeEditable: async function () {
@@ -131,7 +146,7 @@ export default {
             }
             await this.$store.dispatch("deleteProperty", property);
             await this.$emit('reload');
-            this.copySelectedProperties = this.selectedProperties.filter(property => property.propertyName = item.propertyName);
+            this.copySelectedProperties = this.selectedProperties.filter(property => property.propertyName != item.propertyName);
         },
         addProperty: async function () {
             const token = await this.$store.dispatch('getToken');
@@ -149,6 +164,15 @@ export default {
         },
         inputRequired: function (property) {
             return this.copySelectedProduct[property].length > 0 ? true : false;
+        },
+        unbindTag: async function (index) {
+            const query = {
+                token: await this.$store.dispatch('getToken'),
+                product_id: this.copySelectedProduct.id,
+                tag_name: this.tags[index] 
+            }
+            await this.$store.dispatch("unbindTag", query);
+            delete this.tags[index];
         }
     },
     computed: {
@@ -165,3 +189,59 @@ export default {
 
 }
 </script>
+
+<style>
+.productDetailsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.productInfoContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 1vw;
+}
+
+.tagsContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1vw;
+}
+
+.tag {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.2vw;
+    height: 3vh;
+    padding: 0.2vh 0.5vw;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.137);
+    justify-content: center;
+    background-color: rgb(225, 226, 226);
+}
+
+.tag > .cross {
+    color: rgb(70, 70, 70);
+}
+
+.tag > .cross:hover {
+    color: red;
+    cursor: pointer;
+}
+
+.properties {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.addProperty {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0.2vw;
+    width: 80%;
+}
+</style>

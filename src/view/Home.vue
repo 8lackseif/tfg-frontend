@@ -1,7 +1,7 @@
 <template>
     <div>
         <TheHeader/>
-        <div class="HomePage">
+        <div id="HomePage">
           <ProductsTable></ProductsTable>
         </div>
         <TheFooter/>
@@ -46,3 +46,10 @@ export default {
   }
 
 </script>
+
+<style>
+  #HomePage {
+      min-height: 80vh;
+  }
+
+</style>

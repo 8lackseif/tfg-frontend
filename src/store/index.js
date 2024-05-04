@@ -65,6 +65,9 @@ export default new Vuex.Store({
         },
         async addProperty(_,property){
             await apiServices.addProperty(property);
+        },
+        async unbindTag(_,query) {
+            await apiServices.unbindTag(query);
         }
     }
 });
