@@ -1,7 +1,7 @@
 <template>
     <nav>
         <ul>
-            <li><router-link to="/sell">Sell products</router-link></li>
+            <li><router-link to="/sell">Stock Management</router-link></li>
             <li><router-link to="/tags">Tags</router-link></li>
             <li v-if="isAdmin"><router-link to="/register">Register normal users</router-link></li>
         </ul>

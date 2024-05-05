@@ -1,7 +1,7 @@
 <template>
     <div class="searcher"> 
         <input v-model="searchInput" type="text"/>
-        <button v-on:click="sendSearchInput">
+        <button @click="sendSearchInput">
             <img :src="searchImage"/>
         </button>
     </div>
@@ -22,7 +22,7 @@ export default {
     },
     methods: {
         sendSearchInput: async function(){
-            this.$emit('searchInput', this.searchInput);
+            this.$emit('searchInput', this.searchInput );
         }
     }
   }
