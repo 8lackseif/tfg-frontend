@@ -22,7 +22,7 @@ export default new Vuex.Store({
     },
     actions: {
         async login(_, userData) {
-            const response = await apiServices.login(userData);
+            const response = await apiServices.httpRequest(userData, '/login');
             if (response.status == 200) {
                 cookies.setJWTToken(response.data);
             }
@@ -32,7 +32,7 @@ export default new Vuex.Store({
             await cookies.logOut();
         },
         async register(_, userData) {
-            await apiServices.register(userData);
+            await apiServices.httpRequest(userData, '/register');
         },
         async getToken() {
             return await cookies.getJWTToken();
@@ -45,29 +45,46 @@ export default new Vuex.Store({
             }
             return null;
         },
-        async loadProducts(_, token) {
-            const response = await apiServices.getProducts(token);
+        async loadProducts() {
+            const token = await cookies.getJWTToken();
+            const response = await apiServices.httpRequest(token, '/get_products');
             if (response.status === 200) {
                 return response.data;
             }
         },
         async addProduct(_,product) {
-            await apiServices.addProduct(product);
+            await apiServices.httpRequest(product, '/add_product');
         },
         async deleteProduct(_,product) {
-            await apiServices.deleteProduct(product);
+            await apiServices.httpRequest(product, '/delete_product');
         },
         async modifyProduct(_,product){
-            await apiServices.modifyProduct(product);
+            await apiServices.httpRequest(product, '/modify_product');
         },
         async deleteProperty(_,property){
-            await apiServices.deleteProperty(property);
+            await apiServices.httpRequest(property, '/delete_property');
         },
         async addProperty(_,property){
-            await apiServices.addProperty(property);
+            await apiServices.httpRequest(property, '/add_property');
         },
-        async unbindTag(_,query) {
-            await apiServices.unbindTag(query);
+        async getTags(){
+            const token = await cookies.getJWTToken();
+            const response = await apiServices.httpRequest(token, '/get_tags');
+            if (response.status === 200) {
+                return response.data;
+            }
+        },
+        async addTag(_,tag){
+            await apiServices.httpRequest(tag, '/add_tag');
+        },
+        async deleteTag(_,tag){
+            await apiServices.httpRequest(tag, '/delete_tag');
+        },
+        async bindTag(_,tag) {
+            await apiServices.httpRequest(tag, '/bind_tag');
+        },
+        async unbindTag(_,tag) {
+            await apiServices.httpRequest(tag, '/unbind_tag');
         }
     }
 });

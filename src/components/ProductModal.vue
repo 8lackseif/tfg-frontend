@@ -27,8 +27,12 @@
             </div>
             <div class="flex-item">
                 <h3 class="text-center">Tags</h3>
+                <div class="tagSelect" v-if="!editable">
+                    <v-select class="w-75" v-model="selectedTag" :options="tags" label="name"/>
+                    <b-button @click="bindTag">add</b-button>
+                </div>
                 <div class="tagsContainer">
-                    <div class="tag" v-bind:key="t"  v-for="(t, index) in tags" >
+                    <div class="tag" v-bind:key="t"  v-for="(t, index) in getTags">
                         <p>{{ t }}</p>
                         <div class="cross" v-if="!editable" @click="unbindTag(index)">&#x2715;</div>
                     </div>
@@ -85,7 +89,9 @@ export default {
             newProperty: {},
             copySelectedProduct: { ...this.selectedProduct },
             copySelectedProperties: [...this.selectedProperties],
-            tags: []
+            product_tags: [],
+            tags: [],
+            selectedTag: "",
         }
     },
     async created() {
@@ -94,7 +100,9 @@ export default {
             this.canModify = false;
         }
 
-        this.tags = JSON.parse(this.copySelectedProduct.tags);
+        this.product_tags = JSON.parse(this.copySelectedProduct.tags);
+        this.product_tags = this.product_tags.filter(tag => tag != "");
+        this.tags = await this.$store.dispatch('getTags');
     },
     methods: {
         changeEditable: async function () {
@@ -169,10 +177,21 @@ export default {
             const query = {
                 token: await this.$store.dispatch('getToken'),
                 product_id: this.copySelectedProduct.id,
-                tag_name: this.tags[index] 
+                name: this.product_tags[index]
             }
             await this.$store.dispatch("unbindTag", query);
-            delete this.tags[index];
+            this.product_tags.splice(index,1);
+            await this.$emit('reload');
+        },
+        bindTag: async function () {
+            const query = {
+                token: await this.$store.dispatch('getToken'),
+                product_id: this.copySelectedProduct.id,
+                name: this.selectedTag.name
+            }
+            await this.$store.dispatch("bindTag", query);
+            this.product_tags.push(this.selectedTag.name);
+            await this.$emit('reload');
         }
     },
     computed: {
@@ -184,6 +203,9 @@ export default {
             else {
                 return this.fields;
             }
+        },
+        getTags(){
+            return this.product_tags;
         }
     }
 
@@ -243,5 +265,12 @@ export default {
     justify-content: center;
     gap: 0.2vw;
     width: 80%;
+}
+
+.tagSelect {
+    display: flex;
+    flex-wrap: nowrap;
+    margin-bottom: 2vh;
+    gap: 0.2vw;
 }
 </style>
