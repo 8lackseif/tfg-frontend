@@ -1,7 +1,7 @@
 <template>
     <nav>
         <ul>
-            <li><router-link to="/sell">Stock Management</router-link></li>
+            <li><router-link v-if="!isGuest" to="/stock">Stock Management</router-link></li>
             <li><router-link to="/tags">Tags</router-link></li>
             <li v-if="isAdmin"><router-link to="/register">Register normal users</router-link></li>
         </ul>
@@ -18,6 +18,7 @@ export default {
             username: '',
             role: '',
             isAdmin: false,
+            isGuest: false,
         }
     },
     created(){
@@ -30,6 +31,9 @@ export default {
             this.role = payload.role;
             if("administrator".localeCompare(this.role) == 0){
                 this.isAdmin = true;
+            }
+            else if("guest".localeCompare(this.role) == 0){
+                this.isGuest = true;
             }
         },
     }

@@ -11,7 +11,7 @@
           <div class="cross" v-if="editable" @click="deleteTag(t.name)">&#x2715;</div>
         </div>
       </div>
-      <div class="addTag">
+      <div class="addTag" v-if="editable">
           <b-input v-model="newTag" trim />
           <b-btn @click="addTag">add</b-btn>
       </div>

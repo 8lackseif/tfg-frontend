@@ -85,6 +85,9 @@ export default new Vuex.Store({
         },
         async unbindTag(_,tag) {
             await apiServices.httpRequest(tag, '/unbind_tag');
+        },
+        async changeStock(_,stocks) {
+            await apiServices.httpRequest(stocks, '/var_stock');
         }
     }
 });

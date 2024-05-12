@@ -3,7 +3,7 @@ import Router from "vue-router";
 import Login from "@/view/Login";
 import Register from "@/view/Register";
 import Home from "@/view/Home";
-import Sell from "@/view/Sell.vue";
+import Stock from "@/view/Stock.vue";
 import Tags from "@/view/Tags.vue";
 
 Vue.use(Router);
@@ -26,9 +26,9 @@ export default new Router({
       component: Home
     },
     {
-      path: "/sell",
-      name:"SellProducts",
-      component: Sell
+      path: "/stock",
+      name:"StockVar",
+      component: Stock
     },
     {
       path: "/tags",
