@@ -88,6 +88,13 @@ export default new Vuex.Store({
         },
         async changeStock(_,stocks) {
             await apiServices.httpRequest(stocks, '/var_stock');
+        },
+        async getStocks(){
+            const token = await cookies.getJWTToken();
+            const response = await apiServices.httpRequest(token,'/get_stocks');
+            if (response.status === 200) {
+                return response.data;
+            }
         }
     }
 });

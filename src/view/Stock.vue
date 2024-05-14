@@ -46,14 +46,19 @@ export default {
         properties: ""
       },
       stocks: [],
+      stocks_info: [],
     }
   },
   async created() {
     this.products = this.$store.getters.getProducts.products;
+    this.stocks_info = await this.$store.dispatch("getStocks");
   },
   computed: {
     getStocks() {
       return this.stocks;
+    },
+    getLastStocks(){
+      return this.stocks_info;
     }
   },
   methods: {
@@ -72,12 +77,20 @@ export default {
       this.stocks.splice(index, 1);
     },
     changeStock: async function() {
+      let stocks = this.stocks.map(stock => {
+        let newStock = {...stock};
+        delete newStock["name"];
+        return newStock;
+      } );
+
       const obj = {
         token: await this.$store.dispatch('getToken'),
-        stocks: this.stocks
+        stocks: stocks
       }
 
       await this.$store.dispatch('changeStock', obj);
+      this.stocks = [];
+      this.stocks_info = await this.$store.dispatch("getStocks");
     }
 
   },
