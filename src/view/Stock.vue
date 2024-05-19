@@ -9,7 +9,7 @@
         </b-form-group>
         <b-button class="flex-item" @click="addStock">Add to Stock Table</b-button>
       </div>
-      <div class="Separator"></div>
+      <div class="separator"></div>
       <div class="stockContainer">
         <div class="stockData" v-for="(s, index) in getStocks" v-bind:key="index">
           <p> Product: {{ s.name }}<br>Quantity: {{ s.quantity }}</p>
@@ -19,7 +19,18 @@
       <div class="stockTrigger">
         <b-button class="flex-item" @click="changeStock">Change Stock</b-button>
       </div>
-    </main>
+      <div class="chartStock">
+        <h3>Stock Variation History</h3>
+        <v-select v-model="selectedProductChart" :options="products" label="name" @option:selected="getChartDatas(selectedProductChart.id)" />
+        <Bar id="my-chart" :options="getChartOptions" :data="getChartData" />
+      </div>
+      <div class="lastStocks">
+        <p v-for="(s, index) in getLastStocks" v-bind:key="index">Product {{ s.product_name }}({{
+          s.product_id }}) stock changes {{ s.quantity }} on date {{ s.date }}</p>
+      </div>
+     
+      
+    </main>s
     <TheFooter />
   </div>
 </template>
@@ -28,6 +39,10 @@
 <script>
 import TheHeader from '@/components/TheHeader.vue';
 import TheFooter from '@/components/TheFooter.vue';
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import { Bar } from 'vue-chartjs';
+
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 export default {
   name: 'StockVar',
@@ -45,29 +60,54 @@ export default {
         tags: "",
         properties: ""
       },
+      selectedProductChart: {
+
+      },
       stocks: [],
-      stocks_info: [],
+      last_stocks_info: [],
+      chartData: {
+        labels: [],
+        datasets: [
+          {
+            label: '',
+            backgroundColor: '#f87979',
+            data: []
+          }
+        ]
+      },
+      chartOptions: {
+        responsive: true
+      }
     }
   },
   async created() {
-    this.products = this.$store.getters.getProducts.products;
-    this.stocks_info = await this.$store.dispatch("getStocks");
+    this.products = await this.$store.dispatch("loadProducts");
+    this.last_stocks_info = await this.$store.dispatch("getStocks");
+    this.selectedProductChart = this.products[0];
+    await this.getChartDatas(this.selectedProductChart.id);
   },
   computed: {
     getStocks() {
       return this.stocks;
     },
-    getLastStocks(){
-      return this.stocks_info;
+    getLastStocks() {
+      return this.last_stocks_info;
+    },
+    getChartData() {
+      return this.chartData;
+    },
+    getChartOptions() {
+      return this.chartOptions;
     }
   },
   methods: {
     addStock: async function () {
-      if (this.quantity != 0) {
+      let n = parseInt(this.quantity); 
+      if (n != 0 && (this.selectedProduct.stock + n) >= 0) {
         const obj = {
           name: this.selectedProduct.name,
           product_id: this.selectedProduct.id,
-          quantity: parseInt(this.quantity)
+          quantity: n
         }
 
         this.stocks.push(obj);
@@ -76,12 +116,12 @@ export default {
     deleteStock: async function (index) {
       this.stocks.splice(index, 1);
     },
-    changeStock: async function() {
+    changeStock: async function () {
       let stocks = this.stocks.map(stock => {
-        let newStock = {...stock};
+        let newStock = { ...stock };
         delete newStock["name"];
         return newStock;
-      } );
+      });
 
       const obj = {
         token: await this.$store.dispatch('getToken'),
@@ -90,13 +130,38 @@ export default {
 
       await this.$store.dispatch('changeStock', obj);
       this.stocks = [];
-      this.stocks_info = await this.$store.dispatch("getStocks");
+      this.last_stocks_info = await this.$store.dispatch("getStocks");
+    },
+    getChartDatas: async function (product_id) {
+      let data = await this.$store.dispatch("getChartData", {
+        token: await this.$store.dispatch("getToken"),
+        id: product_id
+      });
+
+      var chartLabel = [];
+      var chartData = [];
+      data.forEach(e => {
+        chartLabel.push(e.year);
+        chartData.push(e.quantity);
+      });
+
+      this.chartData = {
+        labels: chartLabel,
+        datasets: [
+          {
+            label: 'stock variation of product: ' + product_id,
+            backgroundColor: '#f87979',
+            data: chartData
+          }
+        ]
+      }
     }
 
   },
   components: {
     TheHeader,
-    TheFooter
+    TheFooter,
+    Bar
   },
 }
 
@@ -156,10 +221,25 @@ export default {
   margin: 1vh 15%;
 }
 
-.Separator {
+.lastStocks {
+  width: 70%;
+  border: 1px solid black;
+  margin: 10vh 15%;
+  padding: 2vh 2vw;
+  text-align: start;
+  border-radius: 10px;
+  background-color: antiquewhite;
+}
+
+.chartStock {
+  width: 70%;
+  margin: 10vh 15%;
+}
+
+.separator {
   border: 1px grey dotted;
   width: 90%;
-  margin: 1vh 5%;
+  margin: 5vh 5%;
 }
 
 .stockPage {

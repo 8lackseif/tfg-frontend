@@ -52,46 +52,52 @@ export default new Vuex.Store({
                 return response.data;
             }
         },
-        async addProduct(_,product) {
+        async addProduct(_, product) {
             await apiServices.httpRequest(product, '/add_product');
         },
-        async deleteProduct(_,product) {
+        async deleteProduct(_, product) {
             await apiServices.httpRequest(product, '/delete_product');
         },
-        async modifyProduct(_,product){
+        async modifyProduct(_, product) {
             await apiServices.httpRequest(product, '/modify_product');
         },
-        async deleteProperty(_,property){
+        async deleteProperty(_, property) {
             await apiServices.httpRequest(property, '/delete_property');
         },
-        async addProperty(_,property){
+        async addProperty(_, property) {
             await apiServices.httpRequest(property, '/add_property');
         },
-        async getTags(){
+        async getTags() {
             const token = await cookies.getJWTToken();
             const response = await apiServices.httpRequest(token, '/get_tags');
             if (response.status === 200) {
                 return response.data;
             }
         },
-        async addTag(_,tag){
+        async addTag(_, tag) {
             await apiServices.httpRequest(tag, '/add_tag');
         },
-        async deleteTag(_,tag){
+        async deleteTag(_, tag) {
             await apiServices.httpRequest(tag, '/delete_tag');
         },
-        async bindTag(_,tag) {
+        async bindTag(_, tag) {
             await apiServices.httpRequest(tag, '/bind_tag');
         },
-        async unbindTag(_,tag) {
+        async unbindTag(_, tag) {
             await apiServices.httpRequest(tag, '/unbind_tag');
         },
-        async changeStock(_,stocks) {
+        async changeStock(_, stocks) {
             await apiServices.httpRequest(stocks, '/var_stock');
         },
-        async getStocks(){
+        async getStocks() {
             const token = await cookies.getJWTToken();
-            const response = await apiServices.httpRequest(token,'/get_stocks');
+            const response = await apiServices.httpRequest(token, '/get_stocks');
+            if (response.status === 200) {
+                return response.data;
+            }
+        },
+        async getChartData(_, query) {
+            const response = await apiServices.httpRequest(query, '/get_stock_history');
             if (response.status === 200) {
                 return response.data;
             }
