@@ -101,6 +101,13 @@ export default new Vuex.Store({
             if (response.status === 200) {
                 return response.data;
             }
+        },
+        async getPopularTagsData() {
+            const token = await cookies.getJWTToken();
+            const response = await apiServices.httpRequest(token, '/get_popular_tags');
+            if (response.status === 200) {
+                return response.data;
+            }
         }
     }
 });

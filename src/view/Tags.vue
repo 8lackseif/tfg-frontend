@@ -12,8 +12,12 @@
         </div>
       </div>
       <div class="addTag" v-if="editable">
-          <b-input v-model="newTag" trim />
-          <b-btn @click="addTag">add</b-btn>
+        <b-input v-model="newTag" trim />
+        <b-btn @click="addTag">add</b-btn>
+      </div>
+      <div class="popularTagsChart">
+        <h3>Tags Count</h3>
+        <Doughnut :options="chartOptions" :data="chartData" />
       </div>
     </main>
     <TheFooter />
@@ -25,6 +29,17 @@
 import TheHeader from '@/components/TheHeader.vue';
 import TheFooter from '@/components/TheFooter.vue';
 import MySearcher from '@/components/MySearcher.vue';
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+  CategoryScale
+} from 'chart.js';
+import { Doughnut } from 'vue-chartjs';
+
+ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 export default {
   name: 'ProductTags',
@@ -34,7 +49,17 @@ export default {
       searchInput: '',
       editable: true,
       newTag: '',
-
+      chartData: {
+        labels:[],
+        datasets:[{
+          backgroundColor: [],
+            data: [],
+        }]
+      },
+      chartOptions: {
+        responsive: true,
+        maintainAspectRatio: false
+      },
     }
   },
   async created() {
@@ -44,6 +69,7 @@ export default {
     }
 
     this.tags = await this.$store.dispatch('getTags');
+    await this.createChartData();
   },
   methods: {
     search: async function (searchInput) {
@@ -57,13 +83,35 @@ export default {
       this.$store.dispatch('deleteTag', query);
       this.tags = this.tags.filter(t => t.name != tagname);
     },
-    addTag: async function() {
+    addTag: async function () {
       const query = {
         token: await this.$store.dispatch('getToken'),
         name: this.newTag
       }
       await this.$store.dispatch('addTag', query);
       this.tags = await this.$store.dispatch('getTags');
+    },
+    createChartData: async function () {
+      let chartData = await this.$store.dispatch('getPopularTagsData');
+      var labels = [];
+      var data = [];
+      var colors = new Set();
+
+      chartData.forEach(e => {
+        labels.push(e.tag_name);
+        data.push(e.count);
+          let rcolor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+          console.log(rcolor);
+          colors.add(rcolor);
+      });
+
+      this.chartData = {
+        labels: labels,
+        datasets:[{
+          backgroundColor: Array.from(colors),
+            data: data,
+        }]
+      }
     }
   },
   computed: {
@@ -72,12 +120,19 @@ export default {
       filteredTags = this.tags.filter(t => t.name.includes(this.searchInput));
       filteredTags.sort((a, b) => (a.name > b.name) ? 1 : (a.name < b.name) ? -1 : 0);
       return filteredTags;
+    },
+    getChartData() {
+      return this.chartData;
+    },
+    getChartOptions() {
+      return this.chartOptions;
     }
   },
   components: {
     TheHeader,
     TheFooter,
-    MySearcher
+    MySearcher,
+    Doughnut
   }
 }
 </script>
@@ -105,5 +160,9 @@ export default {
   margin: 2vh;
   width: 20vw;
   gap: 0.5vw;
+}
+
+.popularTagsChart {
+  
 }
 </style>

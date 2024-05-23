@@ -30,7 +30,7 @@
       </div>
      
       
-    </main>s
+    </main>
     <TheFooter />
   </div>
 </template>
@@ -131,6 +131,7 @@ export default {
       await this.$store.dispatch('changeStock', obj);
       this.stocks = [];
       this.last_stocks_info = await this.$store.dispatch("getStocks");
+      this.getChartDatas(this.selectedProductChart.id);
     },
     getChartDatas: async function (product_id) {
       let data = await this.$store.dispatch("getChartData", {
