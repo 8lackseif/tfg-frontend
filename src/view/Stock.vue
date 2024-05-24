@@ -151,7 +151,7 @@ export default {
         datasets: [
           {
             label: 'stock variation of product: ' + product_id,
-            backgroundColor: '#f87979',
+            backgroundColor: "#748A9D",
             data: chartData
           }
         ]
@@ -189,7 +189,7 @@ export default {
   width: 70%;
   margin: 2vh 15%;
   padding: 2vh 2vw;
-  background-color: rgb(221, 252, 160);
+  background-color: rgba(251, 255, 196, 0.753);
   gap: 2vw;
 }
 
@@ -197,14 +197,13 @@ export default {
   display: flex;
   flex-wrap: nowrap;
   gap: 5%;
-  border: 1px grey solid;
+  border: 1px grey dashed;
   border-radius: 10px;
   align-items: center;
   justify-content: center;
   text-align: start;
   width: 20%;
   padding: 1vh;
-  background-color: rgb(246, 252, 160);
 }
 
 .stockData>.cross {
@@ -229,7 +228,7 @@ export default {
   padding: 2vh 2vw;
   text-align: start;
   border-radius: 10px;
-  background-color: antiquewhite;
+  background-color: var(--highlight-color);
 }
 
 .chartStock {

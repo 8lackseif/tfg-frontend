@@ -13,7 +13,8 @@
         <div class="productsContainer">
             <div class="productContainer" v-bind:key="p.id" v-for="p in searchProducts" @click="showProductModal(p)">
                 <img class="flex-item" :src="p.image_url" />
-                <p class="flex-item"> producto: {{ p.name }} <br> stock: {{ p.stock }} <br> {{ p.description }}</p>
+                <h3 class="productName flex-item">{{ p.name }}</h3>
+                <p class="flex-item productDesc">STOCK: {{ p.stock }} <br> {{ p.description }}</p>
             </div>
         </div>
 
@@ -239,4 +240,13 @@ export default {
 b-modal {
     width: auto;
 }
+
+.productName {
+    margin-top: 2vh;
+}
+
+.productDesc {
+    text-align: justify;
+}
+
 </style>

@@ -163,6 +163,7 @@ export default {
 }
 
 .popularTagsChart {
-  
+  margin-top: 5vh;
+  height: 50vh;
 }
 </style>
