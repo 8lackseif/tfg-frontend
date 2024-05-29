@@ -22,7 +22,7 @@
       <div class="chartStock">
         <h3>Stock Variation History</h3>
         <v-select v-model="selectedProductChart" :options="products" label="name" @option:selected="getChartDatas(selectedProductChart.id)" />
-        <Bar id="my-chart" :options="getChartOptions" :data="getChartData" />
+        <LineChartGenerator id="my-chart" :options="getChartOptions" :data="getChartData" />
       </div>
       <div class="lastStocks">
         <p v-for="(s, index) in getLastStocks" v-bind:key="index">Product {{ s.product_name }}({{
@@ -39,10 +39,28 @@
 <script>
 import TheHeader from '@/components/TheHeader.vue';
 import TheFooter from '@/components/TheFooter.vue';
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
-import { Bar } from 'vue-chartjs';
+import { Line as LineChartGenerator } from 'vue-chartjs';
 
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+import {
+  Chart as ChartJS,
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  LinearScale,
+  CategoryScale,
+  PointElement
+} from 'chart.js'
+
+ChartJS.register(
+  Title,
+  Tooltip,
+  Legend,
+  LineElement,
+  LinearScale,
+  CategoryScale,
+  PointElement
+)
 
 export default {
   name: 'StockVar',
@@ -162,7 +180,7 @@ export default {
   components: {
     TheHeader,
     TheFooter,
-    Bar
+    LineChartGenerator
   },
 }
 
