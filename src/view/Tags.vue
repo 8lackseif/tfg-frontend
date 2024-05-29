@@ -100,9 +100,10 @@ export default {
       chartData.forEach(e => {
         labels.push(e.tag_name);
         data.push(e.count);
+        while(colors.size < data.size) {
           let rcolor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-          console.log(rcolor);
           colors.add(rcolor);
+        }
       });
 
       this.chartData = {
