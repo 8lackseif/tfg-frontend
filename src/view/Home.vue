@@ -3,7 +3,6 @@
         <TheHeader/>
         <div id="HomePage">
           <ProductsTable />
-          <MyMigration />
         </div>
         <TheFooter/>
     </div>

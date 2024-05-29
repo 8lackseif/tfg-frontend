@@ -3,14 +3,14 @@
         <TheHeader />
         <div class = "migrationPage">
             <div class="migrationContainer">
-                <b-button @click="DownloadData()">Export Data</b-button>
+                <b-button @click="downloadData()">Export Data</b-button>
                 <div class = "importContainer">
                     <p>Select JSON file:</p>
                     <input v-on:change="handleFileUpload($event)" type="file"/>
                     <div class="fileContentContainer">
-                        {{ jsonHTML }}
+                        <pre lang="json">{{ jsonHTML }}</pre>
                     </div>
-                    <b-button>Import Data</b-button>
+                    <b-button @click="importData()">Import Data</b-button>
                 </div>
             </div>
         </div>
@@ -22,22 +22,36 @@
 <script>
 import TheHeader from '@/components/TheHeader';
 import TheFooter from '@/components/TheFooter';
-import download from 'downloadjs';
 
 export default {
     name: 'MigrationPage',
     data (){
         return {
             fileContent: "",
-            jsonHTML: ""
+            jsonHTML: "",
+            meta: [
+                { charset: 'utf-8' },
+                { equiv: 'Content-Type', content: 'text/html' },
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' }                 
+
+            ]
         }
     },
     created(){
     },
     methods: {
-        DownloadData: async function () {
+        downloadData: async function () {
             let data = await this.$store.dispatch("exportData");
-            download(JSON.stringify(data),"data.json", "text/plain");
+            data.products.forEach(product => {
+                product.properties = JSON.parse(product.properties);
+                product.tags = JSON.parse(product.tags);
+                product.stock_var = JSON.parse(product.stock_var);
+            });
+            const file = new Blob([JSON.stringify(data)], {type: 'application/json'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(file);
+            a.download = "data.json";
+            a.click();
         },
         handleFileUpload: async function (e) {
             let reader = new FileReader();
@@ -45,13 +59,29 @@ export default {
                 let json = JSON.parse(e.target.result);
                 this.fileContent = json;
                 this.jsonHTML = JSON.stringify(json, undefined, 2);
-                console.log(this.jsonHTML);
             };
             let files = e.target.files || e.dataTranfer.files;
             if(!files.length) {
                 this.fileContent = "No File";
             }
-            reader.readAsText(files[0], "UTF-8");
+            reader.readAsText(files[0], "utf-8");
+        },
+        importData: async function() {
+            let data = {
+                token: await this.$store.dispatch("getToken"),
+                products: this.fileContent.products,
+                users: this.fileContent.users
+            }
+            let response = await this.$store.dispatch("importData", data);
+
+            if (response.status == 200) {
+                this.jsonHTML = "";
+                this.fileContent = "";
+                alert("Data imported successfully.")
+            }
+            else {
+                alert(response.data);
+            }  
         }
     },
     components: {
@@ -83,10 +113,14 @@ export default {
 
 .fileContentContainer {
     width: 100%;
-    height: auto;
     border: solid black 1px;
     margin: 3vh 0;
     padding: 2vh 2vw;
-    background-color: rgb(252, 252, 252);
+    background-color: rgb(58, 57, 57);
+    text-align: start;
+    color: rgb(217, 248, 248);
+    overflow: scroll;
+    max-height: 50vh;
 }
+
 </style>

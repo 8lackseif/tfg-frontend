@@ -115,6 +115,9 @@ export default new Vuex.Store({
             if (response.status === 200) {
                 return response.data;
             }
+        },
+        async importData(_, data) {
+            return await apiServices.httpRequest(data, '/import_data');
         }
     }
 });
