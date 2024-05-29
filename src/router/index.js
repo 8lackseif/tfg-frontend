@@ -5,6 +5,7 @@ import Register from "@/view/Register";
 import Home from "@/view/Home";
 import Stock from "@/view/Stock.vue";
 import Tags from "@/view/Tags.vue";
+import Migration from "@/view/Migration.vue";
 
 Vue.use(Router);
 
@@ -34,6 +35,11 @@ export default new Router({
       path: "/tags",
       name: "ProductTags",
       component: Tags
+    },
+    {
+      path: "/migration",
+      name: "Migration",
+      component: Migration
     }
 ]
 });

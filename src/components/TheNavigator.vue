@@ -4,6 +4,7 @@
             <li><router-link v-if="!isGuest" to="/stock">Stock Management</router-link></li>
             <li><router-link to="/tags">Tags</router-link></li>
             <li v-if="isAdmin"><router-link to="/register">Register normal users</router-link></li>
+            <li v-if="!isGuest"><router-link to="/migration">Migration Database</router-link></li>
         </ul>
     </nav>
 </template>

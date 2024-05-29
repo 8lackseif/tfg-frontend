@@ -2,7 +2,8 @@
     <div>
         <TheHeader/>
         <div id="HomePage">
-          <ProductsTable></ProductsTable>
+          <ProductsTable />
+          <MyMigration />
         </div>
         <TheFooter/>
     </div>
@@ -24,7 +25,7 @@ export default {
       this.init();
     },
     methods: {
-      init: async function(){
+      init: async function() {
         const token = await this.$store.dispatch('getToken');
         if( token === null){
         this.$router.push('/');

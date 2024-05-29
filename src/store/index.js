@@ -108,6 +108,13 @@ export default new Vuex.Store({
             if (response.status === 200) {
                 return response.data;
             }
+        },
+        async exportData() {
+            const token = await cookies.getJWTToken();
+            const response = await apiServices.httpRequest(token, '/export_data');
+            if (response.status === 200) {
+                return response.data;
+            }
         }
     }
 });
