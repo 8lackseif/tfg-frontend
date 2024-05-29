@@ -95,21 +95,19 @@ export default {
       let chartData = await this.$store.dispatch('getPopularTagsData');
       var labels = [];
       var data = [];
-      var colors = new Set();
+      var colors = [];
 
       chartData.forEach(e => {
         labels.push(e.tag_name);
         data.push(e.count);
-        while(colors.size < data.size) {
-          let rcolor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-          colors.add(rcolor);
-        }
+        let rcolor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+        colors.push(rcolor);
       });
 
       this.chartData = {
         labels: labels,
         datasets:[{
-          backgroundColor: Array.from(colors),
+          backgroundColor: colors,
             data: data,
         }]
       }
