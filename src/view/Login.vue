@@ -65,12 +65,12 @@ export default {
   margin: auto;
   margin-top: 10vh;
   border: 3px solid #f1f1f1;
-  height: 80vh;
   width: 30vw;
   align-items: center;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  min-height: 100vh;
 }
 
 .container {

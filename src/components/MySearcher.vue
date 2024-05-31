@@ -1,8 +1,8 @@
 <template>
-    <div class="searcher"> 
-        <input v-model="searchInput" type="text"/>
-        <button @click="sendSearchInput">
-            <img :src="searchImage"/>
+    <div class="input-group mb-3 w-25"> 
+        <input v-model="searchInput" type="text" class="form-control" placeholder="search products ..."/>
+        <button @click="sendSearchInput" class="btn btn-secondary">
+            <b-icon icon="Search"/>
         </button>
     </div>
 </template>
@@ -14,7 +14,6 @@ export default {
     name: 'MySearcher',
     data (){
         return {
-            searchImage: require('@/assets/search.png'),
             searchInput: '',
         }
     },
@@ -29,26 +28,4 @@ export default {
 </script>
 
 <style>
-.searcher{
-    display: flex;
-    flex-wrap: nowrap;
-    width: 10vw;
-    padding: 1vh 1vw;
-}
-
-.searcher input{
-    width: 70%;
-}
-
-.searcher button {
-    display: inline-block;
-    width: 30%;
-    background-color: inherit;
-    border: none;
-}
-
-.searcher button img {
-    width: auto;
-    height: 100%;
-}
 </style>

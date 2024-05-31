@@ -84,7 +84,7 @@ export default {
   margin-top: 3vh;
   margin-bottom: 3vh;
   border: 3px solid #f1f1f1;
-  height: 85vh;
+  min-height: 90vh;
   width: 35vw;
   align-items: center;
   background-color: #fff;

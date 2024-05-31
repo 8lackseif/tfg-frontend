@@ -46,10 +46,10 @@
                         <span><b-btn @click="deleteProperty(item)">delete</b-btn></span>
                     </template>
                 </b-table>
-                <div class="addProperty" v-if="!editable">
+                <div class="input-group mb-3 w-75" v-if="!editable">
                     <b-input class="flex-item" v-model="newProperty.propertyName" trim />
                     <b-input class="flex-item" v-model="newProperty.propertyValue" trim />
-                    <b-btn class="flex-item" @click="addProperty">add</b-btn>
+                    <b-btn class="flex-item w-25" @click="addProperty">add</b-btn>
                 </div>
             </div>
         </div>
@@ -257,14 +257,6 @@ export default {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-}
-
-.addProperty {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    gap: 0.2vw;
-    width: 80%;
 }
 
 .tagSelect {

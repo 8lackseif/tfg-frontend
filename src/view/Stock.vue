@@ -5,7 +5,13 @@
       <div class="stockForm">
         <v-select class="flex-item" v-model="selectedProduct" :options="products" label="name" />
         <b-form-group class="flex-item" id="fieldset-1" label="Quantity:" label-for="input-1">
-          <b-form-input id="input-1" v-model="quantity" trim />
+          <div class="input-group mb-3">
+            <select class="form-select w-25" :v-model="selectedSign">
+              <option value="1">Add</option>
+              <option value="0">Subtract</option>
+            </select>
+            <input type="text" class="form-control w-75" :v-model="quantity"/>
+          </div>
         </b-form-group>
         <b-button class="flex-item" @click="addStock">Add to Stock Table</b-button>
       </div>
@@ -21,15 +27,16 @@
       </div>
       <div class="chartStock">
         <h3>Stock Variation History</h3>
-        <v-select v-model="selectedProductChart" :options="products" label="name" @option:selected="getChartDatas(selectedProductChart.id)" />
+        <v-select v-model="selectedProductChart" :options="products" label="name"
+          @option:selected="getChartDatas(selectedProductChart.id)" />
         <LineChartGenerator id="my-chart" :options="getChartOptions" :data="getChartData" />
       </div>
       <div class="lastStocks">
         <p v-for="(s, index) in getLastStocks" v-bind:key="index">Product {{ s.product_name }}({{
           s.product_id }}) stock changes {{ s.quantity }} on date {{ s.date }}</p>
       </div>
-     
-      
+
+
     </main>
     <TheFooter />
   </div>
@@ -95,7 +102,8 @@ export default {
       },
       chartOptions: {
         responsive: true
-      }
+      },
+      selectedSign: '1'
     }
   },
   async created() {
@@ -120,7 +128,12 @@ export default {
   },
   methods: {
     addStock: async function () {
-      let n = parseInt(this.quantity); 
+      var n = parseInt(this.quantity);
+
+      if(this.selectedSign === '0') {
+        n -= n*2;
+      }
+
       if (n != 0 && (this.selectedProduct.stock + n) >= 0) {
         const obj = {
           name: this.selectedProduct.name,
@@ -129,6 +142,8 @@ export default {
         }
 
         this.stocks.push(obj);
+        this.selectedProduct = {};
+        this.quantity = 0;
       }
     },
     deleteStock: async function (index) {
@@ -202,12 +217,12 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  border: 1px grey solid;
   border-radius: 10px;
   width: 70%;
   margin: 2vh 15%;
   padding: 2vh 2vw;
-  background-color: rgba(251, 255, 196, 0.753);
+  background-color: whitesmoke;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   gap: 2vw;
 }
 
@@ -241,12 +256,12 @@ export default {
 
 .lastStocks {
   width: 70%;
-  border: 1px solid black;
   margin: 10vh 15%;
   padding: 2vh 2vw;
   text-align: start;
   border-radius: 10px;
-  background-color: var(--highlight-color);
+  background-color: whitesmoke;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .chartStock {
@@ -261,6 +276,6 @@ export default {
 }
 
 .stockPage {
-  min-height: 90vh;
+  min-height: 100vh;
 }
 </style>

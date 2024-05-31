@@ -49,7 +49,7 @@ export default {
 
 <style>
   #HomePage {
-      min-height: 80vh;
+      min-height: 100vh;
   }
 
 </style>

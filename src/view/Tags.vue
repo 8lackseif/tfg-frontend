@@ -11,7 +11,7 @@
           <div class="cross" v-if="editable" @click="deleteTag(t.name)">&#x2715;</div>
         </div>
       </div>
-      <div class="addTag" v-if="editable">
+      <div class="addTag input-group mb-3 w-25" v-if="editable">
         <b-input v-model="newTag" trim />
         <b-btn @click="addTag">add</b-btn>
       </div>
@@ -50,10 +50,10 @@ export default {
       editable: true,
       newTag: '',
       chartData: {
-        labels:[],
-        datasets:[{
+        labels: [],
+        datasets: [{
           backgroundColor: [],
-            data: [],
+          data: [],
         }]
       },
       chartOptions: {
@@ -106,9 +106,9 @@ export default {
 
       this.chartData = {
         labels: labels,
-        datasets:[{
+        datasets: [{
           backgroundColor: colors,
-            data: data,
+          data: data,
         }]
       }
     }
@@ -138,31 +138,30 @@ export default {
 
 <style>
 .TagsPage {
-  min-height: 90vh;
+  min-height: 100vh;
 }
 
 .fromTagsPage {
-  margin: 0vh 1.4vw;
+  margin: 0vh 3vw;
 }
 
 .tagsOptions {
-  display: flex;
   height: 5vh;
-  margin: 1vh;
-  gap: 1vw;
-  width: 25vw;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin: 5vh 2vw;
+  padding: 1vh;
+  justify-content: space-between;
 }
 
 .addTag {
-  display: flex;
   height: 5vh;
-  margin: 2vh;
-  width: 20vw;
-  gap: 0.5vw;
+  margin: 2vh 2.4vw;
 }
 
 .popularTagsChart {
-  margin-top: 5vh;
+  margin: 5vh;
   height: 50vh;
 }
 </style>

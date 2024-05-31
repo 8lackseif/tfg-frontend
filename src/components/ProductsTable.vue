@@ -2,11 +2,16 @@
     <div class="myTable">
         <div class="tableOptions">
             <MySearcher @searchInput="search" />
-            <div>
-                <b-button @click="showModifyModal" class="m-2" v-if="canModify">
-                    <img :src="addIcon" class="">
-                </b-button>
-                <b-form-select class="p-1" v-model="selected" :options="orderOptions" />
+            <div class="w-25 d-flex flex-row gap-3">
+                <select class="form-select w-75" v-model="selected">
+                    <option value="code" selected>ordering by code</option>
+                    <option value="name">ordering by name</option>
+                    <option value="description" selected>ordering by description</option>
+                    <option value="stock" selected>ordering by stock</option>
+                </select>
+                <button type="button" @click="showModifyModal" class="btn btn-secondary w-25" v-if="canModify">
+                    <span>Create <b-icon icon="plus" animation="fade"/></span>
+                </button>
             </div>
         </div>
 
@@ -14,7 +19,7 @@
             <div class="productContainer" v-bind:key="p.id" v-for="p in searchProducts" @click="showProductModal(p)">
                 <img class="flex-item" :src="p.image_url" />
                 <h3 class="productName flex-item">{{ p.name }}</h3>
-                <p class="flex-item productDesc">STOCK: {{ p.stock }} <br> {{ p.description }}</p>
+                <p class="flex-item productDesc" :class="{lowStock: p.stock <= 10}">STOCK: {{ p.stock }} <br> {{ p.description }}</p>
             </div>
         </div>
 
@@ -71,12 +76,6 @@ export default {
             products: [],
             tablefields: ["code", "name", "description", "stock"],
             searchInput: "",
-            orderOptions: [
-                { value: "code", text: "ordering by code" },
-                { value: "name", text: "ordering by name" },
-                { value: "description", text: "ordering by description" },
-                { value: "stock", text: "ordering by stock" }
-            ],
             selected: "code",
             selectedProduct: {
                 id: "",
@@ -90,7 +89,6 @@ export default {
             },
             selectedProperties: [],
             canModify: true,
-            addIcon: require('@/assets/add.png')
         }
     },
     async created() {
@@ -195,7 +193,7 @@ export default {
 <style>
 .myTable {
     display: block;
-    margin: 5vh 4vw;
+    margin: 10vh 4vw;
     padding: 2vh 2vw;
 }
 
@@ -208,22 +206,18 @@ export default {
     justify-content: space-between;
 }
 
-.tableOptions img {
-    height: 1.5vh;
-    padding: 0;
-}
-
 .productContainer {
-    height: 60vh;
-    width: 15vw;
+    width: 20vw;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin-top: 2vh;
+    padding-bottom: 4vh;
+    background-color: white;
 }
 
-.productsContainer{
+.productsContainer {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-gap: 1vw;
 }
 
@@ -234,7 +228,7 @@ export default {
 }
 
 .productContainer:hover {
-    background-color: rgb(189, 192, 191);
+    border: 1px grey solid;
 }
 
 b-modal {
@@ -243,10 +237,26 @@ b-modal {
 
 .productName {
     margin-top: 2vh;
+    border-bottom: 1px grey solid;
 }
 
 .productDesc {
-    text-align: justify;
+    text-align: start;
 }
 
+.addButton {
+    position: fixed;
+    bottom: 5vh;
+    right: 2vw;
+    background-color: #e342f1d3;
+    border-radius: 20px;
+}
+
+.addButton:hover {
+    background-color: var(--neutral-dark);
+}
+
+.lowStock {
+    color: red;
+}
 </style>

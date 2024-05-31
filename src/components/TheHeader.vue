@@ -55,13 +55,21 @@ export default {
 
 <style>
 header {
-  background-color: var(--neutral-dark);
+  background-color: #748a9de7;
   color: #fff;
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   max-height: 10vh;
+  position:fixed;
+  width: 100%;
+  top: 0;
+  z-index: 5;
+}
+
+header:hover {
+  background-color: var(--neutral-dark);
 }
 
 .header-left {

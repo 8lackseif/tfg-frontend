@@ -39,6 +39,7 @@ export default {
 main, html {
   height: 100%;
   background-color: var(--neutral-light);
+  padding-top: 4vh;
 }
 
 #app {
