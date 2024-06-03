@@ -19,7 +19,7 @@
             <div class="productContainer" v-bind:key="p.id" v-for="p in searchProducts" @click="showProductModal(p)">
                 <img class="flex-item" :src="p.image_url" />
                 <h3 class="productName flex-item">{{ p.name }}</h3>
-                <p class="flex-item productDesc" :class="{lowStock: p.stock <= 10}">STOCK: {{ p.stock }} <br> {{ p.description }}</p>
+                <p class="flex-item productDesc">STOCK: <span :class="{lowStock: p.stock <= 10}">{{ p.stock }}</span> <br> {{ p.description }}</p>
             </div>
         </div>
 
