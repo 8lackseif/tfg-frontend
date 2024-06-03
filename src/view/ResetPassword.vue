@@ -6,6 +6,7 @@
         <img :src="logoPath" />
       </div>
       <div class="container">
+        <h3 class="mt-5">Reset Password</h3>
         <b-form-group class="flex-item" id="fieldset-1" label="Password:" label-for="input-1">
           <b-form-input id="input-1" v-model="pwd" type="password" trim />
         </b-form-group>

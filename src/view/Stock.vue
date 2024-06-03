@@ -2,7 +2,7 @@
   <div>
     <TheHeader />
     <main class="stockPage">
-      <div class="stockModify">
+      <div v-if="editable" class="stockModify">
         <div class="stockForm">
           <v-select class="flex-item" v-model="selectedProduct" :options="products" label="name" />
           <b-form-group class="flex-item" id="fieldset-1" label="Quantity:" label-for="input-1">
@@ -32,15 +32,15 @@
       <div class="chartStock">
         <h3 class="mb-5">Stock Variation History</h3>
         <v-select v-model="selectedProductChart" :options="products" label="name"
-          @option:selected="getChartDatas(selectedProductChart.id)"/>
+          @option:selected="getChartDatas(selectedProductChart.id)" />
         <LineChartGenerator id="my-chart" :options="getChartOptions" :data="getChartData" />
       </div>
       <div class="separator"></div>
       <div class="w-100">
         <h3 class="mb-5 mt-5">Stock Variation Log</h3>
-        <b-table striped hover :items="getLastStocks" :fields="stockFields" class="w-75 m-auto mb-5"/>
+        <b-table striped hover :items="getLastStocks" :fields="stockFields" class="w-75 m-auto mb-5" />
       </div>
-      
+
 
 
     </main>
@@ -110,10 +110,25 @@ export default {
       chartOptions: {
         responsive: true
       },
-      selectedSign: '1'
+      selectedSign: '1',
+      editable: true
     }
   },
   async created() {
+    const token = await this.$store.dispatch('getToken');
+    if (token === null) {
+      this.$router.push('/');
+    }
+    else {
+      const payload = await this.$store.dispatch("getClaims");
+      if ("1".localeCompare(payload.first_login) == 0) {
+        this.$router.push('/reset_pwd');
+      }
+      if ('guest'.localeCompare(payload.role) === 0) {
+        this.editable = false;
+      }
+    }
+
     this.products = await this.$store.dispatch("loadProducts");
     this.last_stocks_info = await this.$store.dispatch("getStocks");
     this.selectedProductChart = this.products[0];

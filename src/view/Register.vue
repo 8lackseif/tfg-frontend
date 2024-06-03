@@ -66,7 +66,7 @@ export default {
           "rol": this.selected,
           "token": token
         });
-        if(response == 200) {
+        if(response.status == 200) {
           this.$router.push('/');
         }
         else{

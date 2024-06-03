@@ -126,7 +126,7 @@ export default new Vuex.Store({
             return await apiServices.httpRequest(data, '/import_data');
         },
         async resetPassword(_, data) {
-            return await apiServices.httpRequest(data, '/reset_password');
+            return await apiServices.httpRequest(data, '/reset_pwd');
         }
     }
 });

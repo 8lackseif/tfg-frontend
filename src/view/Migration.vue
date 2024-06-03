@@ -37,7 +37,17 @@ export default {
             ]
         }
     },
-    created(){
+    async created(){
+        const token = await this.$store.dispatch('getToken');
+        if( token === null){
+        this.$router.push('/');
+        }
+        else{
+          const payload = await this.$store.dispatch("getClaims");
+          if("1".localeCompare(payload.first_login) == 0){
+            this.$router.push('/reset_pwd');
+          }
+        }
     },
     methods: {
         downloadData: async function () {

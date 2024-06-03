@@ -63,9 +63,18 @@ export default {
     }
   },
   async created() {
-    const payload = await this.$store.dispatch('getClaims');
-    if ('guest'.localeCompare(payload.role) === 0) {
-      this.editable = false;
+    const token = await this.$store.dispatch('getToken');
+    if (token === null) {
+      this.$router.push('/');
+    }
+    else {
+      const payload = await this.$store.dispatch("getClaims");
+      if ("1".localeCompare(payload.first_login) == 0) {
+        this.$router.push('/reset_pwd');
+      }
+      if ('guest'.localeCompare(payload.role) === 0) {
+        this.editable = false;
+      }
     }
 
     this.tags = await this.$store.dispatch('getTags');
