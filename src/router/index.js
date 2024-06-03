@@ -6,6 +6,7 @@ import Home from "@/view/Home";
 import Stock from "@/view/Stock.vue";
 import Tags from "@/view/Tags.vue";
 import Migration from "@/view/Migration.vue";
+import ResetPassword from "@/view/ResetPassword.vue";
 
 Vue.use(Router);
 
@@ -40,6 +41,11 @@ export default new Router({
       path: "/migration",
       name: "Migration",
       component: Migration
+    },
+    {
+      path:"/reset_pwd",
+      name: "ResetPassword",
+      component: ResetPassword
     }
 ]
 });
