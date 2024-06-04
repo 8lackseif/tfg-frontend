@@ -92,7 +92,7 @@ export default {
             }
             else {
                 console.log(response);
-                this.$bvToast.toast(response.statusText, {
+                this.$bvToast.toast('error when importing data, check json format.', {
                     title: 'error ' + response.status,
                     autoHideDelay: 5000,
                     appendToast: true,

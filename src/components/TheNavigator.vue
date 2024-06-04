@@ -1,10 +1,10 @@
 <template>
     <nav>
         <ul>
-            <li><router-link to="/stock">Stock Management</router-link></li>
-            <li><router-link to="/tags">Tags</router-link></li>
-            <li v-if="isAdmin"><router-link to="/register">Register normal users</router-link></li>
-            <li v-if="!isGuest"><router-link to="/migration">Migration Database</router-link></li>
+            <li><router-link to="/stock" class="link">Stock Management</router-link></li>
+            <li><router-link to="/tags" class="link">Tags</router-link></li>
+            <li v-if="isAdmin"><router-link to="/register" class="link">Register normal users</router-link></li>
+            <li v-if="!isGuest"><router-link to="/migration" class="link">Migration Database</router-link></li>
         </ul>
     </nav>
 </template>
@@ -64,10 +64,14 @@ nav li {
     align-items: center;
 }
 
-nav li a {
+.link {
     font-weight: bold;
     display: block;
     text-decoration: none;
     color: #fff;
+}
+
+.link:hover {
+    text-decoration: none;
 }
 </style>

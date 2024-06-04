@@ -11,9 +11,9 @@
           <div class="cross" v-if="editable" @click="deleteTag(t.name)">&#x2715;</div>
         </div>
       </div>
-      <div class="addTag input-group mb-3 w-25" v-if="editable">
-        <b-input v-model="newTag" trim />
-        <b-btn @click="addTag">add</b-btn>
+      <div class="input-group mb-3 w-25 mt-5 ml-5" v-if="editable">
+        <input v-model="newTag" trim class="form-control" type="text" placeholder="add tag ..."/>
+        <button @click="addTag" class="btn btn-secondary">add</button>
       </div>
       <div class="popularTagsChart">
         <h3>Tags Count</h3>
@@ -162,11 +162,6 @@ export default {
   margin: 5vh 2vw;
   padding: 1vh;
   justify-content: space-between;
-}
-
-.addTag {
-  height: 5vh;
-  margin: 2vh 2.4vw;
 }
 
 .popularTagsChart {

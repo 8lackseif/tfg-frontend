@@ -16,7 +16,7 @@
           </b-form-group>
           <b-button class="flex-item" @click="addStock">Add to Stock Table</b-button>
         </div>
-        <div class="stockContainer">
+        <div class="stockContainer ml-5">
           <div class="stockDataContainer">
             <div class="stockData" v-for="(s, index) in getStocks" v-bind:key="index">
               <p> Product: {{ s.name }}<br>Quantity: {{ s.quantity }}</p>

@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div class="productsContainer">
+        <div class="productsContainer mt-5">
             <div class="productContainer card" v-bind:key="p.id" v-for="p in searchProducts"
                 @click="showProductModal(p)">
                 <img class="flex-item" :src="p.image_url" />

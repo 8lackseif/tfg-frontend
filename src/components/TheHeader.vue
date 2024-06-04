@@ -56,7 +56,6 @@ export default {
 <style>
 .header {
   background-color: #748a9de7;
-  color: black;
   display: flex;
   max-height: 10vh;
   position: fixed;
@@ -64,10 +63,6 @@ export default {
   z-index: 5;
   width: 100%;
   align-items: center;
-}
-
-header:hover {
-  background-color: var(--neutral-dark);
 }
 
 .headerLeft {

@@ -19,7 +19,8 @@
                     </b-form-invalid-feedback>
                 </b-form-group>
                 <b-form-group class="flex-item" id="fieldset-3" label="description:" label-for="input-1">
-                    <b-form-input id="input-1" v-model="copySelectedProduct.description" trim :disabled="editable" />
+                    <b-form-textarea id="input-1" v-model="copySelectedProduct.description" rows="3" max-rows="3"
+                        :disabled="editable" />
                 </b-form-group>
                 <b-form-group class="flex-item" id="fieldset-4" label="image_url:" label-for="input-1">
                     <b-form-input id="input-1" v-model="copySelectedProduct.image_url" trim :disabled="editable" />
@@ -54,10 +55,9 @@
             </div>
         </div>
 
-        <div class="d-flex justify-content-around" v-if="canModify">
-            <b-button class="flex-item w-25" variant="outline-danger" block @click="deleteProduct"> delete </b-button>
-            <b-button class="flex-item w-25" variant="outline-info" block @click="setModify"> {{ modifyText }}
-            </b-button>
+        <div class="d-flex align-items-center justify-content-around" v-if="canModify">
+            <b-button class="w-25" variant="outline-danger" block @click="deleteProduct"> delete </b-button>
+            <b-button class="w-25" variant="outline-info" block @click="setModify"> {{ modifyText }}</b-button>
         </div>
 
     </div>
@@ -109,14 +109,29 @@ export default {
             this.editable = !this.editable;
         },
         deleteProduct: async function () {
-            const token = await this.$store.dispatch('getToken');
-            const obj = {
-                token: token,
-                id: this.selectedProduct.id
+            if (confirm("do you want to delete " + this.selectedProduct.name + " from your list?")) {
+                const token = await this.$store.dispatch('getToken');
+                const obj = {
+                    token: token,
+                    id: this.selectedProduct.id
+                }
+                const response = await this.$store.dispatch('deleteProduct', obj);
+                if (response.status == 200) {
+                    await this.$emit('reload');
+                    await this.$emit('back');
+                }
+                else {
+                    this.$bvToast.toast('error when deleting product', {
+                        title: 'error ' + response.status,
+                        autoHideDelay: 5000,
+                        appendToast: true,
+                        variant: "danger",
+                        solid: true,
+                        toaster: "b-toaster-bottom-right"
+                    })
+                }
+
             }
-            await this.$store.dispatch('deleteProduct', obj);
-            await this.$emit('reload');
-            await this.$emit('back');
         },
         setModify: async function () {
             this.editable = !this.editable;
