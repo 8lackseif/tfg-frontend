@@ -19,7 +19,6 @@
           <b-form-select class="w-100" v-model="selected" :options="options" trim />
         </b-form-group>
         <b-button pill variant="outline-primary" class="flex-item" @click="register">Register</b-button>
-        <b-alert class="flex-item text-center" v-model="error" variant="danger">{{ message }}</b-alert>
       </div>
     </form>
     <TheFooter />
@@ -42,9 +41,7 @@ export default {
       options: [
         { value: "user", text: "user" },
         { value: "guest", text: "guest" }
-      ],
-      error: false,
-      message: ''
+      ]
     }
   },
   created() {
@@ -66,16 +63,22 @@ export default {
           "rol": this.selected,
           "token": token
         });
-        if(response.status == 200) {
+        if (response.status == 200) {
           this.$router.push('/');
         }
-        else{
-          this.error = true;
-          this.message = response.data;
+        else {
+          this.$bvToast.toast(response.data, {
+            title: 'error ' + response.status,
+            autoHideDelay: 5000,
+            appendToast: true,
+            variant: "danger",
+            solid: true,
+            toaster: "b-toaster-bottom-right"
+          })
         }
-        
+
       }
-      else{
+      else {
         alert("not same password");
       }
 
@@ -94,7 +97,7 @@ export default {
   margin-top: 3vh;
   margin-bottom: 3vh;
   border: 3px solid #f1f1f1;
-  min-height: 90vh;
+  min-height: 100vh;
   width: 35vw;
   align-items: center;
   background-color: #fff;

@@ -36,9 +36,9 @@
         <LineChartGenerator id="my-chart" :options="getChartOptions" :data="getChartData" />
       </div>
       <div class="separator"></div>
-      <div class="w-100">
+      <div class="w-100 mb-5">
         <h3 class="mb-5 mt-5">Stock Variation Log</h3>
-        <b-table striped hover :items="getLastStocks" :fields="stockFields" class="w-75 m-auto mb-5" />
+        <b-table striped hover :items="getLastStocks" :fields="stockFields" class="w-75 m-auto" />
       </div>
 
 
@@ -183,10 +183,31 @@ export default {
         stocks: stocks
       }
 
-      await this.$store.dispatch('changeStock', obj);
-      this.stocks = [];
-      this.last_stocks_info = await this.$store.dispatch("getStocks");
-      this.getChartDatas(this.selectedProductChart.id);
+      const response = await this.$store.dispatch('changeStock', obj);
+      if (response.status == 200) {
+        this.stocks = [];
+        this.last_stocks_info = await this.$store.dispatch("getStocks");
+        this.getChartDatas(this.selectedProductChart.id);
+        this.$bvToast.toast('stock changed successfully', {
+          title: 'success',
+          autoHideDelay: 5000,
+          appendToast: true,
+          variant: "success",
+          solid: true,
+          toaster: "b-toaster-bottom-right"
+        });
+      }
+      else {
+        this.$bvToast.toast(response.data, {
+          title: 'error ' + response.status,
+          autoHideDelay: 5000,
+          appendToast: true,
+          variant: "danger",
+          solid: true,
+          toaster: "b-toaster-bottom-right"
+        });
+      }
+
     },
     getChartDatas: async function (product_id) {
       let data = await this.$store.dispatch("getChartData", {

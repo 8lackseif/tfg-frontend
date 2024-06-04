@@ -2,8 +2,8 @@
     <div class="myTable">
         <div class="tableOptions">
             <MySearcher @searchInput="search" />
-            <div class="w-25 d-flex flex-row gap-3">
-                <select class="form-select w-75" v-model="selected">
+            <div class="w-25 d-flex flex-row">
+                <select class="form-select w-75 mr-4" v-model="selected">
                     <option value="code" selected>ordering by code</option>
                     <option value="name">ordering by name</option>
                     <option value="description" selected>ordering by description</option>

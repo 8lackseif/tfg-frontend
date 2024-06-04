@@ -28,11 +28,11 @@
             <div class="flex-item">
                 <h3 class="text-center">Tags</h3>
                 <div class="tagSelect" v-if="!editable">
-                    <v-select class="w-75" v-model="selectedTag" :options="tags" label="name"/>
+                    <v-select class="w-75" v-model="selectedTag" :options="tags" label="name" />
                     <b-button @click="bindTag">add</b-button>
                 </div>
                 <div class="tagsContainer">
-                    <div class="tag" v-bind:key="t"  v-for="(t, index) in getTags">
+                    <div class="tag" v-bind:key="t" v-for="(t, index) in getTags">
                         <p>{{ t }}</p>
                         <div class="cross" v-if="!editable" @click="unbindTag(index)">&#x2715;</div>
                     </div>
@@ -40,8 +40,8 @@
             </div>
             <div class="flex-item properties">
                 <h3 class="text-center">Properties</h3>
-                <b-table class="text-start flex-item" sticky-header striped hover responsive :items="copySelectedProperties"
-                    :fields="computedFields">
+                <b-table class="text-start flex-item" sticky-header striped hover responsive
+                    :items="copySelectedProperties" :fields="computedFields">
                     <template v-slot:cell(delete)="{ item }">
                         <span><b-btn @click="deleteProperty(item)">delete</b-btn></span>
                     </template>
@@ -139,7 +139,28 @@ export default {
                         image_url: this.copySelectedProduct.image_url,
                         token: token
                     }
-                    await this.$store.dispatch("modifyProduct", product);
+                    const response = await this.$store.dispatch("modifyProduct", product);
+                    if (response.status == 200) {
+                        this.$bvToast.toast('changes saved', {
+                            title: 'success',
+                            autoHideDelay: 5000,
+                            appendToast: true,
+                            variant: "success",
+                            solid: true,
+                            toaster: "b-toaster-bottom-right"
+                        });
+                    }
+                    else {
+                        this.$bvToast.toast(response.data, {
+                            title: 'error ' + response.status,
+                            autoHideDelay: 5000,
+                            appendToast: true,
+                            variant: "danger",
+                            solid: true,
+                            toaster: "b-toaster-bottom-right"
+                        });
+                    }
+
                     await this.$emit('reload');
                     await this.$emit('refresh', { id: this.selectedProduct.id });
                 }
@@ -180,7 +201,7 @@ export default {
                 name: this.product_tags[index]
             }
             await this.$store.dispatch("unbindTag", query);
-            this.product_tags.splice(index,1);
+            this.product_tags.splice(index, 1);
             await this.$emit('reload');
         },
         bindTag: async function () {
@@ -204,7 +225,7 @@ export default {
                 return this.fields;
             }
         },
-        getTags(){
+        getTags() {
             return this.product_tags;
         }
     }
@@ -244,11 +265,11 @@ export default {
     background-color: rgb(225, 226, 226);
 }
 
-.tag > .cross {
+.tag>.cross {
     color: rgb(70, 70, 70);
 }
 
-.tag > .cross:hover {
+.tag>.cross:hover {
     color: red;
     cursor: pointer;
 }
