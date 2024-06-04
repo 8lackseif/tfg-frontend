@@ -1,10 +1,10 @@
 <template>
-  <header>
-    <div class="header-left">
+  <header class="header">
+    <div class="headerLeft">
         <img :src="logoPath" @click="goHome">
     </div>
     <TheNavigator/>
-    <div class="header-right">
+    <div class="headerRight">
       <span @click="logout"><a><strong>LOGOUT</strong></a></span>
       <span><strong>User : </strong> {{ username }}</span>
     </div>
@@ -54,39 +54,37 @@ export default {
 
 
 <style>
-header {
+.header {
   background-color: #748a9de7;
-  color: #fff;
-  padding: 10px 20px;
+  color: black;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   max-height: 10vh;
-  position:fixed;
-  width: 100%;
+  position: fixed;
   top: 0;
   z-index: 5;
+  width: 100%;
+  align-items: center;
 }
 
 header:hover {
   background-color: var(--neutral-dark);
 }
 
-.header-left {
-  flex: 0;
+.headerLeft {
+  width: 5%;
 }
 
-.header-left img {
+.headerLeft img {
     height: 10vh;
     width: auto;
 }
 
-.header-right {
-  flex: 1;
+.headerRight {
+  width: 30%;
   text-align: end;
 }
 
-.header-right span {
+.headerRight span {
   margin-right: 1vw;
   cursor: pointer;
 }

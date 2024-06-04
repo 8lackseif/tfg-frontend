@@ -47,7 +47,7 @@ export default {
 <style>
 nav{
     height: 10vh;
-    
+    width: 65%;
 }
 nav ul {
     display: flex;

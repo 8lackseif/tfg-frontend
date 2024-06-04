@@ -1,12 +1,12 @@
 <template>
     <div>
         <TheHeader />
-        <div class = "migrationPage">
+        <div class="migrationPage">
             <div class="migrationContainer">
                 <b-button @click="downloadData()">Export Data</b-button>
-                <div class = "importContainer">
+                <div class="importContainer">
                     <p>Select JSON file:</p>
-                    <input v-on:change="handleFileUpload($event)" type="file"/>
+                    <input v-on:change="handleFileUpload($event)" type="file" />
                     <div class="fileContentContainer">
                         <pre lang="json">{{ jsonHTML }}</pre>
                     </div>
@@ -25,28 +25,29 @@ import TheFooter from '@/components/TheFooter';
 
 export default {
     name: 'MigrationPage',
-    data (){
+    data() {
         return {
             fileContent: "",
             jsonHTML: "",
             meta: [
                 { charset: 'utf-8' },
                 { equiv: 'Content-Type', content: 'text/html' },
-                { name: 'viewport', content: 'width=device-width, initial-scale=1' }                 
+                { name: 'viewport', content: 'width=device-width, initial-scale=1' }
 
-            ]
+            ],
+            toastType: "danger"
         }
     },
-    async created(){
+    async created() {
         const token = await this.$store.dispatch('getToken');
-        if( token === null){
-        this.$router.push('/');
+        if (token === null) {
+            this.$router.push('/');
         }
-        else{
-          const payload = await this.$store.dispatch("getClaims");
-          if("1".localeCompare(payload.first_login) == 0){
-            this.$router.push('/reset_pwd');
-          }
+        else {
+            const payload = await this.$store.dispatch("getClaims");
+            if ("1".localeCompare(payload.first_login) == 0) {
+                this.$router.push('/reset_pwd');
+            }
         }
     },
     methods: {
@@ -57,7 +58,7 @@ export default {
                 product.tags = JSON.parse(product.tags);
                 product.stock_var = JSON.parse(product.stock_var);
             });
-            const file = new Blob([JSON.stringify(data)], {type: 'application/json'});
+            const file = new Blob([JSON.stringify(data)], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(file);
             a.download = "data.json";
@@ -71,12 +72,12 @@ export default {
                 this.jsonHTML = JSON.stringify(json, undefined, 2);
             };
             let files = e.target.files || e.dataTranfer.files;
-            if(!files.length) {
+            if (!files.length) {
                 this.fileContent = "No File";
             }
             reader.readAsText(files[0], "utf-8");
         },
-        importData: async function() {
+        importData: async function () {
             let data = {
                 token: await this.$store.dispatch("getToken"),
                 products: this.fileContent.products,
@@ -87,18 +88,26 @@ export default {
             if (response.status == 200) {
                 this.jsonHTML = "";
                 this.fileContent = "";
-                alert("Data imported successfully.")
+                alert("Data imported successfully.");
             }
             else {
-                alert(response.data);
-            }  
+                console.log(response);
+                this.$bvToast.toast(response.statusText, {
+                    title: 'error ' + response.status,
+                    autoHideDelay: 5000,
+                    appendToast: true,
+                    variant: "danger",
+                    solid: true,
+                    toaster: "b-toaster-bottom-right"
+                })
+            }
         }
     },
     components: {
         TheFooter,
         TheHeader,
     }
-  }
+}
 </script>
 
 <style>
@@ -107,7 +116,7 @@ export default {
 }
 
 .migrationContainer {
-    display:flex;
+    display: flex;
     flex-wrap: wrap;
     width: 90%;
     margin: 3vh 5%;
@@ -128,9 +137,11 @@ export default {
     padding: 2vh 2vw;
     background-color: rgb(58, 57, 57);
     text-align: start;
-    color: rgb(217, 248, 248);
     overflow: scroll;
     max-height: 50vh;
 }
 
+.fileContentContainer pre {
+    color: rgb(217, 248, 248);
+}
 </style>

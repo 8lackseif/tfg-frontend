@@ -63,14 +63,14 @@ export default {
 <style>
 #loginPage {
   margin: auto;
-  margin-top: 10vh;
+  margin-top: 5vh;
   border: 3px solid #f1f1f1;
   width: 30vw;
   align-items: center;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  min-height: 100vh;
+  min-height: 80vh;
 }
 
 .container {
