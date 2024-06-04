@@ -2,8 +2,8 @@
     <div class="myTable">
         <div class="tableOptions">
             <MySearcher @searchInput="search" />
-            <div class="w-25 d-flex flex-row gap-3">
-                <select class="form-select w-75" v-model="selected">
+            <div class="w-25 d-flex flex-row">
+                <select class="form-select w-75 mr-4" v-model="selected">
                     <option value="code" selected>ordering by code</option>
                     <option value="name">ordering by name</option>
                     <option value="description" selected>ordering by description</option>
@@ -20,8 +20,7 @@
                 @click="showProductModal(p)">
                 <img class="flex-item" :src="p.image_url" />
                 <h3 class="productName flex-item">{{ p.name }}</h3>
-                <span class="flex-item productDesc" :class="{ lowStock: p.stock <= 10 }">STOCK: {{ p.stock }} <br> {{
-                p.description }}</span>
+                <p class="flex-item productDesc">STOCK: <span :class="{lowStock: p.stock <= 10}">{{ p.stock }}</span> <br> {{ p.description }}</p>
             </div>
         </div>
 

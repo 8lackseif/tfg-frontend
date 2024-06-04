@@ -57,15 +57,28 @@ export default {
     register: async function () {
       if (this.pwd2 == this.pwd) {
         const token = await this.$store.dispatch("getToken");
-        await this.$store.dispatch("register", {
+        const response = await this.$store.dispatch("register", {
           "username": this.username,
           "pwd": this.pwd,
           "rol": this.selected,
           "token": token
         });
-        this.$router.push('/');
+        if (response.status == 200) {
+          this.$router.push('/');
+        }
+        else {
+          this.$bvToast.toast(response.data, {
+            title: 'error ' + response.status,
+            autoHideDelay: 5000,
+            appendToast: true,
+            variant: "danger",
+            solid: true,
+            toaster: "b-toaster-bottom-right"
+          })
+        }
+
       }
-      else{
+      else {
         alert("not same password");
       }
 
@@ -84,7 +97,7 @@ export default {
   margin-top: 3vh;
   margin-bottom: 3vh;
   border: 3px solid #f1f1f1;
-  min-height: 90vh;
+  min-height: 100vh;
   width: 35vw;
   align-items: center;
   background-color: #fff;

@@ -2,39 +2,45 @@
   <div>
     <TheHeader />
     <main class="stockPage">
-      <div class="stockForm">
-        <v-select class="flex-item" v-model="selectedProduct" :options="products" label="name" />
-        <b-form-group class="flex-item" id="fieldset-1" label="Quantity:" label-for="input-1">
-          <div class="input-group mb-3">
-            <select class="form-select w-25" v-model="selectedSign">
-              <option value="1">Add</option>
-              <option value="0">Subtract</option>
-            </select>
-            <input type="text" class="form-control w-75" v-model="quantity"/>
+      <div v-if="editable" class="stockModify">
+        <div class="stockForm">
+          <v-select class="flex-item" v-model="selectedProduct" :options="products" label="name" />
+          <b-form-group class="flex-item" id="fieldset-1" label="Quantity:" label-for="input-1">
+            <div class="input-group mb-3">
+              <select class="form-select w-50" v-model="selectedSign">
+                <option value="1">Add</option>
+                <option value="0">Substract</option>
+              </select>
+              <input type="text" class="form-control w-50" v-model="quantity" />
+            </div>
+          </b-form-group>
+          <b-button class="flex-item" @click="addStock">Add to Stock Table</b-button>
+        </div>
+        <div class="stockContainer">
+          <div class="stockDataContainer">
+            <div class="stockData" v-for="(s, index) in getStocks" v-bind:key="index">
+              <p> Product: {{ s.name }}<br>Quantity: {{ s.quantity }}</p>
+              <div class="cross" @click="deleteStock(index)">&#x2715;</div>
+            </div>
           </div>
-        </b-form-group>
-        <b-button class="flex-item" @click="addStock">Add to Stock Table</b-button>
-      </div>
-      <div class="separator"></div>
-      <div class="stockContainer">
-        <div class="stockData" v-for="(s, index) in getStocks" v-bind:key="index">
-          <p> Product: {{ s.name }}<br>Quantity: {{ s.quantity }}</p>
-          <div class="cross" @click="deleteStock(index)">&#x2715;</div>
+          <div class="stockTrigger">
+            <b-button class="flex-item" @click="changeStock">Change Stock</b-button>
+          </div>
         </div>
       </div>
-      <div class="stockTrigger">
-        <b-button class="flex-item" @click="changeStock">Change Stock</b-button>
-      </div>
+      <div class="separator"></div>
       <div class="chartStock">
-        <h3>Stock Variation History</h3>
+        <h3 class="mb-5">Stock Variation History</h3>
         <v-select v-model="selectedProductChart" :options="products" label="name"
           @option:selected="getChartDatas(selectedProductChart.id)" />
         <LineChartGenerator id="my-chart" :options="getChartOptions" :data="getChartData" />
       </div>
-      <div class="lastStocks">
-        <p v-for="(s, index) in getLastStocks" v-bind:key="index">Product {{ s.product_name }}({{
-          s.product_id }}) stock changes {{ s.quantity }} on date {{ s.date }}</p>
+      <div class="separator"></div>
+      <div class="w-100 mb-5">
+        <h3 class="mb-5 mt-5">Stock Variation Log</h3>
+        <b-table striped hover :items="getLastStocks" :fields="stockFields" class="w-75 m-auto" />
       </div>
+
 
 
     </main>
@@ -90,6 +96,7 @@ export default {
       },
       stocks: [],
       last_stocks_info: [],
+      stockFields: ["product_id", "product_name", "date", "quantity"],
       chartData: {
         labels: [],
         datasets: [
@@ -103,10 +110,25 @@ export default {
       chartOptions: {
         responsive: true
       },
-      selectedSign: '1'
+      selectedSign: '1',
+      editable: true
     }
   },
   async created() {
+    const token = await this.$store.dispatch('getToken');
+    if (token === null) {
+      this.$router.push('/');
+    }
+    else {
+      const payload = await this.$store.dispatch("getClaims");
+      if ("1".localeCompare(payload.first_login) == 0) {
+        this.$router.push('/reset_pwd');
+      }
+      if ('guest'.localeCompare(payload.role) === 0) {
+        this.editable = false;
+      }
+    }
+
     this.products = await this.$store.dispatch("loadProducts");
     this.last_stocks_info = await this.$store.dispatch("getStocks");
     this.selectedProductChart = this.products[0];
@@ -130,8 +152,8 @@ export default {
     addStock: async function () {
       var n = parseInt(this.quantity);
 
-      if(this.selectedSign === '0') {
-        n -= n*2;
+      if (this.selectedSign === '0') {
+        n -= n * 2;
       }
 
       if (n != 0 && (this.selectedProduct.stock + n) >= 0) {
@@ -161,10 +183,31 @@ export default {
         stocks: stocks
       }
 
-      await this.$store.dispatch('changeStock', obj);
-      this.stocks = [];
-      this.last_stocks_info = await this.$store.dispatch("getStocks");
-      this.getChartDatas(this.selectedProductChart.id);
+      const response = await this.$store.dispatch('changeStock', obj);
+      if (response.status == 200) {
+        this.stocks = [];
+        this.last_stocks_info = await this.$store.dispatch("getStocks");
+        this.getChartDatas(this.selectedProductChart.id);
+        this.$bvToast.toast('stock changed successfully', {
+          title: 'success',
+          autoHideDelay: 5000,
+          appendToast: true,
+          variant: "success",
+          solid: true,
+          toaster: "b-toaster-bottom-right"
+        });
+      }
+      else {
+        this.$bvToast.toast(response.data, {
+          title: 'error ' + response.status,
+          autoHideDelay: 5000,
+          appendToast: true,
+          variant: "danger",
+          solid: true,
+          toaster: "b-toaster-bottom-right"
+        });
+      }
+
     },
     getChartDatas: async function (product_id) {
       let data = await this.$store.dispatch("getChartData", {
@@ -202,15 +245,22 @@ export default {
 </script>
 
 <style>
+.stockModify {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 90%;
+  margin: auto;
+  justify-content: space-between;
+  min-height: 40vh;
+}
+
 .stockForm {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   border: 1px grey solid;
   border-radius: 10px;
-  width: 70%;
-  margin: 2vh 15%;
-  padding: 2vh 2vw;
+  width: 30%;
 }
 
 .stockContainer {
@@ -219,7 +269,16 @@ export default {
   flex-wrap: wrap;
   border-radius: 10px;
   width: 70%;
-  margin: 2vh 15%;
+  padding: 2vh 2vw;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.stockDataContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border-radius: 10px;
+  width: 100%;
   padding: 2vh 2vw;
   background-color: whitesmoke;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -249,7 +308,6 @@ export default {
 }
 
 .stockTrigger {
-  display: flex;
   width: 70%;
   margin: 1vh 15%;
 }

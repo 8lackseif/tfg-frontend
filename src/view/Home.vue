@@ -31,6 +31,9 @@ export default {
         }
         else{
           const payload = await this.$store.dispatch("getClaims");
+          if("1".localeCompare(payload.first_login) == 0){
+            this.$router.push('/reset_pwd');
+          }
           if("administrator".localeCompare(payload.role) == 0){
             this.isAdmin = true;
           }

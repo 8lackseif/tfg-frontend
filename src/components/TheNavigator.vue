@@ -1,7 +1,7 @@
 <template>
     <nav>
         <ul>
-            <li><router-link v-if="!isGuest" to="/stock">Stock Management</router-link></li>
+            <li><router-link to="/stock">Stock Management</router-link></li>
             <li><router-link to="/tags">Tags</router-link></li>
             <li v-if="isAdmin"><router-link to="/register">Register normal users</router-link></li>
             <li v-if="!isGuest"><router-link to="/migration">Migration Database</router-link></li>
@@ -20,6 +20,7 @@ export default {
             role: '',
             isAdmin: false,
             isGuest: false,
+            location: ""
         }
     },
     created(){
@@ -36,6 +37,8 @@ export default {
             else if("guest".localeCompare(this.role) == 0){
                 this.isGuest = true;
             }
+
+            this.location = window.location.href;
         },
     }
   }
@@ -44,7 +47,7 @@ export default {
 <style>
 nav{
     height: 10vh;
-    
+    width: 65%;
 }
 nav ul {
     display: flex;
