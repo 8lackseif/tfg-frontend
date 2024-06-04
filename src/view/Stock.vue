@@ -6,11 +6,11 @@
         <v-select class="flex-item" v-model="selectedProduct" :options="products" label="name" />
         <b-form-group class="flex-item" id="fieldset-1" label="Quantity:" label-for="input-1">
           <div class="input-group mb-3">
-            <select class="form-select w-25" :v-model="selectedSign">
+            <select class="form-select w-25" v-model="selectedSign">
               <option value="1">Add</option>
               <option value="0">Subtract</option>
             </select>
-            <input type="text" class="form-control w-75" :v-model="quantity"/>
+            <input type="text" class="form-control w-75" v-model="quantity"/>
           </div>
         </b-form-group>
         <b-button class="flex-item" @click="addStock">Add to Stock Table</b-button>

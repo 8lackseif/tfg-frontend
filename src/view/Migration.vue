@@ -93,7 +93,7 @@ export default {
 
 <style>
 .migrationPage {
-    min-height: 110vh;
+    min-height: 100vh;
 }
 
 .migrationContainer {

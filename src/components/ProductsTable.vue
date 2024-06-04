@@ -10,16 +10,18 @@
                     <option value="stock" selected>ordering by stock</option>
                 </select>
                 <button type="button" @click="showModifyModal" class="btn btn-secondary w-25" v-if="canModify">
-                    <span>Create <b-icon icon="plus" animation="fade"/></span>
+                    <span>Create <b-icon icon="plus" animation="fade" /></span>
                 </button>
             </div>
         </div>
 
         <div class="productsContainer">
-            <div class="productContainer" v-bind:key="p.id" v-for="p in searchProducts" @click="showProductModal(p)">
+            <div class="productContainer card" v-bind:key="p.id" v-for="p in searchProducts"
+                @click="showProductModal(p)">
                 <img class="flex-item" :src="p.image_url" />
                 <h3 class="productName flex-item">{{ p.name }}</h3>
-                <p class="flex-item productDesc" :class="{lowStock: p.stock <= 10}">STOCK: {{ p.stock }} <br> {{ p.description }}</p>
+                <span class="flex-item productDesc" :class="{ lowStock: p.stock <= 10 }">STOCK: {{ p.stock }} <br> {{
+                p.description }}</span>
             </div>
         </div>
 
@@ -193,8 +195,10 @@ export default {
 <style>
 .myTable {
     display: block;
-    margin: 10vh 4vw;
-    padding: 2vh 2vw;
+    margin: 5vh 4vw;
+    padding: 5vh 2vw;
+    background-color: whitesmoke;
+    border-radius: 20px;
 }
 
 .tableOptions {
@@ -207,23 +211,22 @@ export default {
 }
 
 .productContainer {
-    width: 20vw;
+    width: 16vw;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 2vh;
     padding-bottom: 4vh;
-    background-color: white;
 }
 
 .productsContainer {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 1vw;
+
 }
 
 .productContainer img {
     height: 30vh;
-    border: 1px black solid;
+    border: 1px rgb(235, 234, 234) solid;
     border-radius: 5px;
 }
 
@@ -242,6 +245,10 @@ b-modal {
 
 .productDesc {
     text-align: start;
+    height: 3rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .addButton {

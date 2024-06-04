@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="background">
     <form id="loginPage">
       <div class="logoContainer">
         <img :src="logoPath" />
@@ -61,16 +61,27 @@ export default {
 </script>
 
 <style>
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: scroll;
+  background: fixed linear-gradient(rgba(153, 153, 153, 0.418), rgba(167, 166, 166, 0.623)), url(../assets/fondo.jpeg);
+  background-size: 500px;
+}
+
 #loginPage {
   margin: auto;
-  margin-top: 10vh;
   border: 3px solid #f1f1f1;
   width: 30vw;
   align-items: center;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  min-height: 100vh;
+  min-height: 80vh;
+  margin-top: 7vh;
 }
 
 .container {
