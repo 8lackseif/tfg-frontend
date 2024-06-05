@@ -68,7 +68,7 @@ export default {
   right: 0;
   bottom: 0;
   overflow-y: scroll;
-  background: fixed linear-gradient(rgba(153, 153, 153, 0.418), rgba(167, 166, 166, 0.623)), url(../assets/fondo.jpeg);
+  background: fixed linear-gradient(rgba(82, 81, 81, 0.603), rgba(88, 88, 88, 0.863)), url(../assets/fondo.jpeg);
   background-size: 500px;
 }
 
