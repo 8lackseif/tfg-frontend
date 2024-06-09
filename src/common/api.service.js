@@ -1,14 +1,15 @@
 import Vue from "vue"
 import VueAxios from "vue-axios"
 import axios from "axios"
-const api_url = "http://localhost:8000"
+
 
 const apiServices = {
     init(){
         Vue.use(VueAxios,axios)
     },
     async httpRequest(userData, endpoint){
-        return axios.post(api_url + endpoint, userData)
+        console.log(process.env);
+        return axios.post(process.env.VUE_APP_API_URL + endpoint, userData)
         .then(result => {
             return result;
         })
