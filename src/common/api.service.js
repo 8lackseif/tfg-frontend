@@ -8,7 +8,6 @@ const apiServices = {
         Vue.use(VueAxios,axios)
     },
     async httpRequest(userData, endpoint){
-        console.log(process.env);
         return axios.post(process.env.VUE_APP_API_URL + endpoint, userData)
         .then(result => {
             return result;
