@@ -4,17 +4,17 @@ import axios from "axios"
 
 
 const apiServices = {
-    init(){
-        Vue.use(VueAxios,axios)
+    init() {
+        Vue.use(VueAxios, axios)
     },
-    async httpRequest(userData, endpoint){
-        return axios.post(process.env.VUE_APP_API_URL + endpoint, userData)
-        .then(result => {
-            return result;
-        })
-        .catch(error => {
-            return error.response;
-        });
+    async myHttpRequest(userData, endpoint) {
+        return axios.post("/api" + endpoint, userData)
+            .then(result => {
+                return result;
+            })
+            .catch(error => {
+                return error.response;
+            });
     }
 }
 

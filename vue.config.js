@@ -3,10 +3,10 @@ module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
     proxy: {
-      '/': {
-        target: process.env.VUE_APP_API_URL,
+      '/api': {
+        target: "http://rocket:8000",
         ws: false,
       }
     }
-  },
-})
+  }
+});

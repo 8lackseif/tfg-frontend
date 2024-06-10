@@ -42,6 +42,7 @@ export default {
       }
     },
     login: async function () {
+      console.log("hola2");
       const response = await this.$store.dispatch("login", {
         "username": this.username,
         "pwd": this.pwd,
